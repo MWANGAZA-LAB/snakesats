@@ -7,6 +7,15 @@ class SnakeSats {
         this.levelElement = document.getElementById('level');
         this.bestScoreElement = document.getElementById('best-score');
         this.tipDisplay = document.getElementById('tip-display');
+        this.gameMessage = document.getElementById('game-message');
+        this.startBtn = document.getElementById('start-btn');
+        this.restartBtn = document.getElementById('restart-btn');
+        
+        // Stats elements
+        this.currentScoreElement = document.getElementById('current-score');
+        this.snakeLengthElement = document.getElementById('snake-length');
+        this.satsCollectedElement = document.getElementById('sats-collected');
+        this.goodPracticesElement = document.getElementById('good-practices');
         
         // Game state
         this.gameRunning = false;
@@ -14,6 +23,10 @@ class SnakeSats {
         this.level = 1;
         this.bestScore = localStorage.getItem('snakesats-best') || 0;
         this.bestScoreElement.textContent = this.bestScore;
+        
+        // Stats tracking
+        this.satsCollected = 0;
+        this.goodPractices = 0;
         
         // Game settings
         this.gridSize = 20;
@@ -66,8 +79,9 @@ class SnakeSats {
     
     init() {
         this.setupEventListeners();
-        this.showStartScreen();
         this.updateTip();
+        this.updateStats();
+        this.showMessage("Click 'Start Game' to begin!");
     }
     
     setupEventListeners() {
@@ -149,11 +163,11 @@ class SnakeSats {
         });
         
         // Button listeners
-        document.getElementById('start-btn').addEventListener('click', () => {
+        this.startBtn.addEventListener('click', () => {
             this.startGame();
         });
         
-        document.getElementById('restart-btn').addEventListener('click', () => {
+        this.restartBtn.addEventListener('click', () => {
             this.restartGame();
         });
     }
@@ -163,6 +177,8 @@ class SnakeSats {
         this.score = 0;
         this.level = 1;
         this.speed = 150;
+        this.satsCollected = 0;
+        this.goodPractices = 0;
         
         // Initialize snake
         this.snake = [{x: 10, y: 10}];
@@ -174,9 +190,10 @@ class SnakeSats {
         this.donts = [];
         this.dos = [];
         
-        // Hide start screen
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('game-overlay').classList.add('hidden');
+        // Update UI
+        this.startBtn.classList.add('hidden');
+        this.restartBtn.classList.add('hidden');
+        this.showMessage("Game started! Use arrow keys or swipe to control the snake.");
         
         // Generate initial objects
         this.generateSat();
@@ -234,9 +251,12 @@ class SnakeSats {
         this.sats = this.sats.filter(sat => {
             if (head.x === sat.x && head.y === sat.y) {
                 this.score += 10;
+                this.satsCollected++;
                 satEaten = true;
                 this.updateScore();
+                this.updateStats();
                 this.updateTip();
+                this.showMessage("Sat collected! +10 points");
                 return false;
             }
             return true;
@@ -254,8 +274,11 @@ class SnakeSats {
         this.dos.forEach(doItem => {
             if (head.x === doItem.x && head.y === doItem.y) {
                 this.score += 5; // Bonus for good practices
+                this.goodPractices++;
                 this.updateScore();
+                this.updateStats();
                 this.updateTip();
+                this.showMessage("Good practice! +5 points");
             }
         });
         
@@ -442,16 +465,20 @@ class SnakeSats {
             this.bestScoreElement.textContent = this.bestScore;
         }
         
-        // Show game over screen
-        document.getElementById('overlay-title').textContent = 'Game Over!';
-        document.getElementById('overlay-message').textContent = message;
-        document.getElementById('final-score').textContent = this.score;
-        document.getElementById('final-level').textContent = this.level;
-        document.getElementById('game-overlay').classList.remove('hidden');
+        // Update UI
+        this.showMessage(`Game Over! ${message} Final Score: ${this.score} sats`);
+        this.restartBtn.classList.remove('hidden');
     }
     
     updateScore() {
         this.scoreElement.textContent = this.score;
+        this.currentScoreElement.textContent = this.score;
+    }
+    
+    updateStats() {
+        this.snakeLengthElement.textContent = this.snake.length;
+        this.satsCollectedElement.textContent = this.satsCollected;
+        this.goodPracticesElement.textContent = this.goodPractices;
     }
     
     updateTip() {
@@ -464,32 +491,14 @@ class SnakeSats {
     }
     
     showMessage(message) {
-        // Create temporary message display
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = message;
-        messageDiv.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(247, 147, 26, 0.9);
-            color: #0a0e14;
-            padding: 15px 25px;
-            border-radius: 10px;
-            font-weight: bold;
-            z-index: 1000;
-            animation: fadeInOut 2s ease-in-out;
-        `;
+        this.gameMessage.textContent = message;
         
-        document.body.appendChild(messageDiv);
-        
+        // Clear message after 3 seconds
         setTimeout(() => {
-            document.body.removeChild(messageDiv);
-        }, 2000);
-    }
-    
-    showStartScreen() {
-        document.getElementById('start-screen').classList.remove('hidden');
+            if (this.gameMessage.textContent === message) {
+                this.gameMessage.textContent = '';
+            }
+        }, 3000);
     }
 }
 

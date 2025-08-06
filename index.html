@@ -33,6 +33,7 @@
 </head>
 <body>
     <div class="game-container">
+        <!-- Header Section -->
         <header class="game-header">
             <h1 class="game-title">🐍 SnakeSats</h1>
             <div class="score-board">
@@ -51,54 +52,93 @@
             </div>
         </header>
 
-        <div class="game-area">
-            <canvas id="gameCanvas" width="800" height="600"></canvas>
-            
-            <div id="game-overlay" class="game-overlay hidden">
-                <div class="overlay-content">
-                    <h2 id="overlay-title">Game Over!</h2>
-                    <p id="overlay-message">You hit a bad investment habit!</p>
-                    <div class="overlay-stats">
-                        <p>Final Score: <span id="final-score">0</span> sats</p>
-                        <p>Level Reached: <span id="final-level">1</span></p>
+        <!-- Main Game Section -->
+        <div class="main-content">
+            <!-- Left Panel - Game Info -->
+            <div class="left-panel">
+                <div class="info-panel">
+                    <h3>Bitcoin Tips:</h3>
+                    <div id="tip-display" class="tip-text">
+                        Stack sats regularly and practice self-custody!
                     </div>
-                    <button id="restart-btn" class="btn-primary">Play Again</button>
                 </div>
-            </div>
-
-            <div id="start-screen" class="start-screen">
-                <div class="start-content">
-                    <h1>🐍 SnakeSats</h1>
-                    <p class="subtitle">Learn Bitcoin best practices through gameplay!</p>
+                
+                <div class="instructions-panel">
+                    <h3>How to Play:</h3>
+                    <ul>
+                        <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
+                        <li>❌ <strong>Avoid "Don'ts"</strong> - Red skulls (bad investment habits)</li>
+                        <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
+                    </ul>
                     
-                    <div class="instructions">
-                        <h3>How to Play:</h3>
-                        <ul>
-                            <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
-                            <li>❌ <strong>Avoid "Don'ts"</strong> - Red skulls (bad investment habits)</li>
-                            <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
-                        </ul>
-                    </div>
+                    <h3>Controls:</h3>
+                    <p><strong>Desktop:</strong> Arrow keys or WASD</p>
+                    <p><strong>Mobile:</strong> Swipe to change direction</p>
+                </div>
+            </div>
 
-                    <div class="controls">
-                        <h3>Controls:</h3>
-                        <p><strong>Desktop:</strong> Arrow keys or WASD</p>
-                        <p><strong>Mobile:</strong> Swipe to change direction</p>
+            <!-- Center Panel - Game Canvas -->
+            <div class="center-panel">
+                <canvas id="gameCanvas" width="600" height="400"></canvas>
+                
+                <!-- Game Status Display -->
+                <div class="game-status">
+                    <div id="game-message" class="status-message"></div>
+                    <div class="status-buttons">
+                        <button id="start-btn" class="btn-primary">Start Game</button>
+                        <button id="restart-btn" class="btn-secondary hidden">Play Again</button>
                     </div>
+                </div>
+            </div>
 
-                    <button id="start-btn" class="btn-primary">Start Game</button>
+            <!-- Right Panel - Game Stats -->
+            <div class="right-panel">
+                <div class="stats-panel">
+                    <h3>Game Stats:</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Current Score:</span>
+                        <span id="current-score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Snake Length:</span>
+                        <span id="snake-length" class="stat-value">1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Sats Collected:</span>
+                        <span id="sats-collected" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Good Practices:</span>
+                        <span id="good-practices" class="stat-value">0</span>
+                    </div>
+                </div>
+                
+                <div class="legend-panel">
+                    <h3>Game Elements:</h3>
+                    <div class="legend-item">
+                        <span class="legend-symbol">🐍</span>
+                        <span class="legend-text">Your Snake</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol">🟡</span>
+                        <span class="legend-text">Sats (Collect)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol">❌</span>
+                        <span class="legend-text">Don'ts (Avoid)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol">✅</span>
+                        <span class="legend-text">Do's (Pass Through)</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="game-info">
-            <div class="info-panel">
-                <h3>Bitcoin Tips:</h3>
-                <div id="tip-display" class="tip-text">
-                    Stack sats regularly and practice self-custody!
-                </div>
-            </div>
-        </div>
+        <!-- Footer Section -->
+        <footer class="game-footer">
+            <p>Learn Bitcoin best practices through gameplay! Stack sats, stay safe, and HODL! 🚀</p>
+        </footer>
     </div>
 
     <script src="game.js"></script>
