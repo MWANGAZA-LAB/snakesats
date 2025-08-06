@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #0f1419 100%);
+    color: #f7931a;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -28,36 +28,40 @@ body {
     text-align: center;
     margin-bottom: 20px;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(15, 20, 25, 0.8);
+    border-radius: 10px;
+    border: 2px solid #f7931a;
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .desktop-header h1 {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 10px;
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #f7931a;
+    text-shadow: 0 0 20px rgba(247, 147, 26, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(247, 147, 26, 0.5); }
+    to { text-shadow: 0 0 30px rgba(247, 147, 26, 0.8), 0 0 40px rgba(247, 147, 26, 0.3); }
 }
 
 .desktop-header p {
     font-size: 1.1rem;
-    opacity: 0.9;
+    color: #8b9dc3;
 }
 
 /* Mobile Header */
 .mobile-header {
     display: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(15, 20, 25, 0.8);
     border-radius: 10px;
+    border: 2px solid #f7931a;
     padding: 10px;
     margin-bottom: 10px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .mobile-stats {
@@ -69,23 +73,25 @@ body {
 .stat-item {
     text-align: center;
     padding: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 35, 50, 0.8);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #f7931a;
 }
 
 .stat-label {
     display: block;
     font-size: 0.8rem;
-    opacity: 0.7;
+    color: #8b9dc3;
     margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .stat-value {
     display: block;
     font-size: 1.1rem;
     font-weight: bold;
-    color: #ffd700;
+    color: #f7931a;
 }
 
 /* Main Content */
@@ -99,31 +105,32 @@ body {
 
 /* Left Panel - Desktop Only */
 .left-panel {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+    background: rgba(15, 20, 25, 0.8);
+    border-radius: 10px;
+    border: 2px solid #f7931a;
     padding: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
     height: fit-content;
 }
 
 /* Control Sections */
 .control-section {
     margin-bottom: 15px;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(26, 35, 50, 0.8);
+    border: 1px solid #f7931a;
+    box-shadow: 0 4px 16px rgba(247, 147, 26, 0.1);
 }
 
 .section-toggle {
     width: 100%;
     padding: 12px 15px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(26, 35, 50, 0.9);
     border: none;
-    color: #ffffff;
+    color: #f7931a;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -132,7 +139,12 @@ body {
 }
 
 .section-toggle:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(247, 147, 26, 0.1);
+}
+
+.section-toggle.active {
+    background: rgba(247, 147, 26, 0.2);
+    border-bottom: 1px solid #f7931a;
 }
 
 .section-toggle .toggle-icon {
@@ -152,7 +164,7 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 20, 25, 0.9);
 }
 
 .control-section.active .section-content {
@@ -170,29 +182,29 @@ body {
 .game-btn {
     padding: 12px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .game-btn.primary {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    color: #1a1a2e;
+    background: linear-gradient(45deg, #f7931a, #ff9500);
+    color: #0f1419;
 }
 
 .game-btn.primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 6px 16px rgba(247, 147, 26, 0.3);
 }
 
 .game-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(45deg, #8b9dc3, #6c7b7f);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .game-btn.secondary:hover:not(:disabled) {
@@ -210,18 +222,21 @@ body {
     margin-bottom: 8px;
     font-size: 0.9rem;
     line-height: 1.4;
+    color: #8b9dc3;
 }
 
 /* Control Info */
 .control-info p {
     margin-bottom: 8px;
     font-size: 0.9rem;
+    color: #8b9dc3;
 }
 
 /* Difficulty Panel */
 .difficulty-panel h4 {
     margin-bottom: 10px;
     font-size: 1rem;
+    color: #f7931a;
 }
 
 .difficulty-options {
@@ -232,23 +247,28 @@ body {
 
 .difficulty-btn {
     padding: 10px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
+    border: 2px solid #f7931a;
+    background: rgba(26, 35, 50, 0.8);
+    color: #8b9dc3;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .difficulty-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(247, 147, 26, 0.1);
+    transform: translateY(-1px);
 }
 
 .difficulty-btn.active {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    color: #1a1a2e;
-    border-color: #ffd700;
+    background: rgba(247, 147, 26, 0.2);
+    border-color: #ff9500;
+    color: #f7931a;
+    box-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
 }
 
 /* Sound Panel */
@@ -304,6 +324,7 @@ body {
 
 .element-text {
     font-size: 0.9rem;
+    color: #8b9dc3;
 }
 
 /* Center Panel - Game Canvas */
@@ -324,10 +345,10 @@ body {
 }
 
 #gameCanvas {
-    border: 3px solid #ffd700;
-    border-radius: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    border: 3px solid #f7931a;
+    border-radius: 10px;
+    background: #0a0e14;
+    box-shadow: 0 0 50px rgba(247, 147, 26, 0.3);
     max-width: 100%;
     height: auto;
 }
@@ -338,7 +359,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: #f7931a;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -347,7 +368,7 @@ body {
     display: none;
     z-index: 10;
     backdrop-filter: blur(10px);
-    border: 2px solid #ffd700;
+    border: 2px solid #f7931a;
 }
 
 /* Mobile Game Stats */
@@ -361,11 +382,11 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(15, 20, 25, 0.8);
     padding: 10px;
     border-radius: 10px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid #f7931a;
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .health-bar {
@@ -388,15 +409,16 @@ body {
     font-size: 0.9rem;
     font-weight: 500;
     min-width: 80px;
+    color: #f7931a;
 }
 
 /* Right Panel - Desktop Only */
 .right-panel {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+    background: rgba(15, 20, 25, 0.8);
+    border-radius: 10px;
+    border: 2px solid #f7931a;
     padding: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
     height: fit-content;
 }
 
@@ -407,7 +429,10 @@ body {
 .info-panel h3 {
     margin-bottom: 15px;
     font-size: 1.3rem;
-    color: #ffd700;
+    color: #f7931a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .stats-panel {
@@ -421,34 +446,38 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 35, 50, 0.8);
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(139, 157, 195, 0.2);
 }
 
 .stat-label {
     font-size: 0.9rem;
-    opacity: 0.8;
+    color: #8b9dc3;
 }
 
 .stat-value {
     font-weight: bold;
-    color: #ffd700;
+    color: #f7931a;
 }
 
 .tips-panel h3 {
     margin-bottom: 15px;
     font-size: 1.3rem;
-    color: #ffd700;
+    color: #f7931a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .tip-content {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 35, 50, 0.8);
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(139, 157, 195, 0.2);
     font-size: 0.9rem;
     line-height: 1.5;
+    color: #8b9dc3;
 }
 
 /* Mobile Bottom Control Bar */
@@ -458,11 +487,12 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(26, 26, 46, 0.95);
+    background: rgba(15, 20, 25, 0.95);
     backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 2px solid #f7931a;
     padding: 15px;
     z-index: 100;
+    box-shadow: 0 -8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .mobile-controls {
@@ -486,19 +516,18 @@ body {
 }
 
 .mobile-btn.primary {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    color: #1a1a2e;
+    background: linear-gradient(45deg, #f7931a, #ff9500);
+    color: #0f1419;
 }
 
 .mobile-btn.primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 6px 16px rgba(247, 147, 26, 0.3);
 }
 
 .mobile-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(45deg, #8b9dc3, #6c7b7f);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mobile-btn.secondary:hover:not(:disabled) {
@@ -525,13 +554,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(26, 35, 50, 0.8);
+    color: #f7931a;
+    border: 1px solid #f7931a;
 }
 
 .mobile-btn.icon-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(247, 147, 26, 0.1);
 }
 
 /* Mobile Drawers */
@@ -541,15 +570,16 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(26, 26, 46, 0.98);
+    background: rgba(15, 20, 25, 0.98);
     backdrop-filter: blur(20px);
-    border-top: 2px solid #ffd700;
+    border-top: 2px solid #f7931a;
     border-radius: 20px 20px 0 0;
     z-index: 200;
     max-height: 80vh;
     overflow-y: auto;
     transform: translateY(100%);
     transition: transform 0.3s ease;
+    box-shadow: 0 -8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .mobile-drawer.active {
@@ -561,18 +591,18 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(247, 147, 26, 0.2);
 }
 
 .drawer-header h3 {
-    color: #ffd700;
+    color: #f7931a;
     font-size: 1.3rem;
 }
 
 .drawer-close {
     background: none;
     border: none;
-    color: #ffffff;
+    color: #f7931a;
     font-size: 1.5rem;
     cursor: pointer;
     padding: 5px;
@@ -586,7 +616,7 @@ body {
 }
 
 .drawer-close:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(247, 147, 26, 0.1);
 }
 
 .drawer-content {
@@ -598,7 +628,7 @@ body {
 }
 
 .mobile-section h4 {
-    color: #ffd700;
+    color: #f7931a;
     margin-bottom: 15px;
     font-size: 1.1rem;
 }
@@ -611,9 +641,9 @@ body {
 
 .mobile-difficulty-btn {
     padding: 15px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
+    border: 2px solid #f7931a;
+    background: rgba(26, 35, 50, 0.8);
+    color: #8b9dc3;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -622,13 +652,14 @@ body {
 }
 
 .mobile-difficulty-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(247, 147, 26, 0.1);
 }
 
 .mobile-difficulty-btn.active {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
-    color: #1a1a2e;
-    border-color: #ffd700;
+    background: rgba(247, 147, 26, 0.2);
+    border-color: #ff9500;
+    color: #f7931a;
+    box-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
 }
 
 .mobile-sound-controls {
@@ -665,6 +696,7 @@ body {
     margin-bottom: 12px;
     font-size: 1rem;
     line-height: 1.5;
+    color: #8b9dc3;
 }
 
 .mobile-element-legend {
@@ -675,9 +707,9 @@ body {
 
 .mobile-element-legend .element-item {
     padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(26, 35, 50, 0.8);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(139, 157, 195, 0.2);
 }
 
 .mobile-element-legend .element-symbol {
@@ -687,22 +719,23 @@ body {
 
 .mobile-element-legend .element-text {
     font-size: 1rem;
+    color: #8b9dc3;
 }
 
 /* Game Footer */
 .game-footer {
     text-align: center;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(15, 20, 25, 0.8);
     border-radius: 10px;
     margin-top: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #f7931a;
+    box-shadow: 0 8px 32px rgba(247, 147, 26, 0.2);
 }
 
 .game-footer p {
     font-size: 1rem;
-    opacity: 0.8;
+    color: #8b9dc3;
 }
 
 /* Responsive Design */
@@ -884,7 +917,7 @@ body {
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     body {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a2332 50%, #0f1419 100%);
     }
 }
 

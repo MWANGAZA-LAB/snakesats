@@ -515,12 +515,12 @@ class SnakeSats {
     
     draw() {
         // Clear canvas
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        this.ctx.fillStyle = '#0a0e14';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw grid
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-        this.ctx.lineWidth = 1;
+        // Draw grid (subtle)
+        this.ctx.strokeStyle = '#1a2332';
+        this.ctx.lineWidth = 0.5;
         
         for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
             this.ctx.beginPath();
@@ -537,55 +537,93 @@ class SnakeSats {
         }
         
         // Draw snake
-        this.ctx.fillStyle = '#ffd700';
         this.snake.forEach((segment, index) => {
             if (index === 0) {
                 // Head
-                this.ctx.fillStyle = '#ffed4e';
+                this.ctx.fillStyle = '#f7931a';
+                this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
+                
+                // Eyes
+                this.ctx.fillStyle = '#0a0e14';
+                const eyeSize = 3;
+                const eyeOffset = 5;
+                this.ctx.fillRect(segment.x * this.gridSize + eyeOffset, segment.y * this.gridSize + eyeOffset, eyeSize, eyeSize);
+                this.ctx.fillRect(segment.x * this.gridSize + this.gridSize - eyeOffset - eyeSize, segment.y * this.gridSize + eyeOffset, eyeSize, eyeSize);
             } else {
                 // Body
-                this.ctx.fillStyle = '#ffd700';
+                this.ctx.fillStyle = `hsl(35, 100%, ${60 - index * 2}%)`;
+                this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
             }
-            this.ctx.fillRect(
-                segment.x * this.gridSize + 2,
-                segment.y * this.gridSize + 2,
-                this.gridSize - 4,
-                this.gridSize - 4
-            );
         });
         
         // Draw sats
-        this.ctx.fillStyle = '#4CAF50';
         this.sats.forEach(sat => {
-            this.ctx.fillRect(
-                sat.x * this.gridSize + 4,
-                sat.y * this.gridSize + 4,
-                this.gridSize - 8,
-                this.gridSize - 8
+            this.ctx.fillStyle = '#f7931a';
+            this.ctx.beginPath();
+            this.ctx.arc(
+                sat.x * this.gridSize + this.gridSize / 2,
+                sat.y * this.gridSize + this.gridSize / 2,
+                this.gridSize / 2 - 2,
+                0,
+                2 * Math.PI
             );
+            this.ctx.fill();
+            
+            // Sat symbol
+            this.ctx.fillStyle = '#0a0e14';
+            this.ctx.font = '12px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('₿', sat.x * this.gridSize + this.gridSize / 2, sat.y * this.gridSize + this.gridSize / 2 + 4);
         });
         
-        // Draw fiats
-        this.ctx.fillStyle = '#f44336';
+        // Draw fiats (dollar signs)
         this.fiats.forEach(fiat => {
-            this.ctx.fillRect(
-                fiat.x * this.gridSize + 4,
-                fiat.y * this.gridSize + 4,
-                this.gridSize - 8,
-                this.gridSize - 8
-            );
+            this.ctx.fillStyle = '#ff6b6b';
+            this.ctx.fillRect(fiat.x * this.gridSize, fiat.y * this.gridSize, this.gridSize, this.gridSize);
+            
+            // Dollar symbol
+            this.ctx.fillStyle = '#0a0e14';
+            this.ctx.font = '14px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('💵', fiat.x * this.gridSize + this.gridSize / 2, fiat.y * this.gridSize + this.gridSize / 2 + 4);
         });
         
-        // Draw dos
-        this.ctx.fillStyle = '#2196F3';
+        // Draw do's (green paths)
         this.dos.forEach(doItem => {
-            this.ctx.fillRect(
-                doItem.x * this.gridSize + 4,
-                doItem.y * this.gridSize + 4,
-                this.gridSize - 8,
-                this.gridSize - 8
-            );
+            this.ctx.fillStyle = '#51cf66';
+            this.ctx.fillRect(doItem.x * this.gridSize, doItem.y * this.gridSize, this.gridSize, this.gridSize);
+            
+            // Checkmark symbol
+            this.ctx.fillStyle = '#0a0e14';
+            this.ctx.font = '14px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('✅', doItem.x * this.gridSize + this.gridSize / 2, doItem.y * this.gridSize + this.gridSize / 2 + 4);
         });
+        
+        // Draw health bar
+        this.drawHealthBar();
+    }
+    
+    drawHealthBar() {
+        const barWidth = 200;
+        const barHeight = 10;
+        const x = (this.canvas.width - barWidth) / 2;
+        const y = this.canvas.height - 20;
+        
+        // Background
+        this.ctx.fillStyle = '#333';
+        this.ctx.fillRect(x, y, barWidth, barHeight);
+        
+        // Health bar
+        const healthWidth = (this.health / this.maxHealth) * barWidth;
+        const healthColor = this.health > 50 ? '#51cf66' : this.health > 25 ? '#ffd43b' : '#ff6b6b';
+        this.ctx.fillStyle = healthColor;
+        this.ctx.fillRect(x, y, healthWidth, barHeight);
+        
+        // Border
+        this.ctx.strokeStyle = '#f7931a';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(x, y, barWidth, barHeight);
     }
     
     generateSat() {
