@@ -3,32 +3,11 @@ class SnakeSats {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.scoreElement = document.getElementById('score');
-        this.levelElement = document.getElementById('level');
-        this.healthElement = document.getElementById('health');
-        this.bestScoreElement = document.getElementById('best-score');
-        this.tipDisplay = document.getElementById('tip-display');
-        this.gameMessage = document.getElementById('game-message');
-        this.startBtn = document.getElementById('start-btn');
-        this.pauseBtn = document.getElementById('pause-btn');
-        this.restartBtn = document.getElementById('restart-btn');
+        this.gameMessage = document.getElementById('gameMessage');
         
-        // Stats elements
-        this.currentScoreElement = document.getElementById('current-score');
-        this.snakeLengthElement = document.getElementById('snake-length');
-        this.satsCollectedElement = document.getElementById('sats-collected');
-        this.goodPracticesElement = document.getElementById('good-practices');
-        this.currentDifficultyElement = document.getElementById('current-difficulty');
-        
-        // Sound controls
-        this.soundToggle = document.getElementById('sound-toggle');
-        this.musicToggle = document.getElementById('music-toggle');
-        
-        // Difficulty selector
-        this.difficultyButtons = document.querySelectorAll('.difficulty-btn');
-        
-        // Collapsible sections
-        this.sectionToggles = document.querySelectorAll('.section-toggle');
+        // Device detection
+        this.isMobile = this.detectMobile();
+        this.setupCanvas();
         
         // Game state
         this.gameRunning = false;
@@ -37,160 +16,91 @@ class SnakeSats {
         this.level = 1;
         this.health = 100;
         this.maxHealth = 100;
-        this.bestScore = localStorage.getItem('snakesats-best') || 0;
-        this.bestScoreElement.textContent = this.bestScore;
-        
-        // Difficulty settings
-        this.difficulty = 'normal';
-        this.difficultySettings = {
-            beginner: {
-                speed: 200,
-                speedIncrease: 5,
-                healthGain: 15,
-                fiatDamage: 10,
-                fiatSpawnRate: 0.3
-            },
-            normal: {
-                speed: 150,
-                speedIncrease: 10,
-                healthGain: 10,
-                fiatDamage: 20,
-                fiatSpawnRate: 0.5
-            },
-            legendary: {
-                speed: 100,
-                speedIncrease: 15,
-                healthGain: 5,
-                fiatDamage: 30,
-                fiatSpawnRate: 0.8
-            }
-        };
-        
-        // Stats tracking
         this.satsCollected = 0;
         this.goodPractices = 0;
         this.fiatHit = 0;
-        
-        // Game settings
-        this.gridSize = 20;
-        this.speed = this.difficultySettings[this.difficulty].speed;
-        this.speedIncrease = this.difficultySettings[this.difficulty].speedIncrease;
-        
-        // Snake
-        this.snake = [{x: 10, y: 10}];
-        this.direction = {x: 0, y: 0};
-        this.nextDirection = {x: 0, y: 0};
+        this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
         // Game objects
+        this.snake = [{x: 10, y: 10}];
+        this.direction = {x: 0, y: 0};
         this.sats = [];
         this.fiats = [];
         this.dos = [];
         
+        // Game settings
+        this.difficulty = 'beginner';
+        this.difficultySettings = {
+            beginner: { speed: 150, healthGain: 10, fiatDamage: 20, fiatSpawnRate: 0.3 },
+            normal: { speed: 120, healthGain: 8, fiatDamage: 25, fiatSpawnRate: 0.4 },
+            legendary: { speed: 90, healthGain: 5, fiatDamage: 30, fiatSpawnRate: 0.5 }
+        };
+        
         // Sound system
-        this.sounds = {};
+        this.soundEnabled = true;
+        this.musicEnabled = true;
         this.audioContext = null;
-        this.initSoundSystem();
+        this.sounds = {};
         
-        // Educational content
-        this.bitcoinTips = [
-            "Stack sats regularly and practice self-custody!",
-            "Never invest more than you can afford to lose.",
-            "Keep your private keys secure and offline.",
-            "Dollar Cost Averaging (DCA) reduces timing risk.",
-            "Not your keys, not your coins - use cold storage!",
-            "Bitcoin is scarce - only 21 million will ever exist.",
-            "Lightning Network enables instant, low-fee transactions.",
-            "Bitcoin is decentralized - no single point of failure.",
-            "HODL through volatility - Bitcoin is a long-term play.",
-            "Verify, don't trust - always do your own research.",
-            "Fiat currency loses value over time due to inflation.",
-            "Bitcoin is deflationary - supply is fixed and decreasing.",
-            "Self-custody means you control your own money.",
-            "Exchanges can be hacked - not your keys, not your coins!",
-            "Bitcoin is the hardest money ever created."
-        ];
+        // Mobile touch controls
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.lastTapTime = 0;
         
-        this.fiatMessages = [
-            "Oops! You touched fiat currency - it's losing value!",
-            "Fiat money is inflationary - stick to Bitcoin!",
-            "Central banks print money endlessly - avoid fiat!",
-            "Fiat loses purchasing power over time!",
-            "Bitcoin is sound money - fiat is not!"
-        ];
-        
-        this.doMessages = [
-            "Great! You're practicing self-custody!",
-            "Excellent! You're stacking sats regularly!",
-            "Perfect! You're using cold storage!",
-            "Smart! You're doing your own research!",
-            "Awesome! You're avoiding emotional trading!",
-            "Brilliant! You understand Bitcoin's scarcity!",
-            "Outstanding! You're embracing decentralization!"
-        ];
-        
-        // Initialize
         this.init();
     }
     
-    init() {
-        this.setupEventListeners();
-        this.setupDifficultySelection();
-        this.setupCollapsibleSections();
-        this.updateTip();
-        this.updateStats();
-        this.showMessage("Select difficulty and click 'Start Game' to begin!");
+    detectMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+               (window.innerWidth <= 768);
     }
     
-    setupCollapsibleSections() {
-        this.sectionToggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                const sectionId = toggle.dataset.section;
-                const content = document.getElementById(sectionId);
-                const arrow = toggle.querySelector('.toggle-arrow');
-                
-                // Toggle active state
-                toggle.classList.toggle('active');
-                content.classList.toggle('active');
-                
-                // Auto-expand game controls when game starts
-                if (sectionId === 'game-controls' && this.gameRunning) {
-                    toggle.classList.add('active');
-                    content.classList.add('active');
-                }
-            });
-        });
-        
-        // Auto-expand game controls by default
-        const gameControlsToggle = document.querySelector('[data-section="game-controls"]');
-        const gameControlsContent = document.getElementById('game-controls');
-        gameControlsToggle.classList.add('active');
-        gameControlsContent.classList.add('active');
+    setupCanvas() {
+        if (this.isMobile) {
+            // Mobile canvas setup
+            const maxSize = Math.min(window.innerWidth - 40, window.innerHeight - 200);
+            this.canvas.width = maxSize;
+            this.canvas.height = maxSize;
+            this.gridSize = Math.floor(maxSize / 20);
+        } else {
+            // Desktop canvas setup
+            this.canvas.width = 400;
+            this.canvas.height = 400;
+            this.gridSize = 20;
+        }
+    }
+    
+    init() {
+        this.initSoundSystem();
+        this.setupEventListeners();
+        this.setupCollapsibleSections();
+        this.setupMobileControls();
+        this.updateStats();
+        this.updateMobileStats();
+        this.showMessage('Press Start to begin your Bitcoin journey! 🚀');
     }
     
     initSoundSystem() {
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
             this.createSounds();
-        } catch (e) {
-            console.log('Web Audio API not supported');
+        } catch (error) {
+            console.log('Audio not supported');
         }
     }
     
     createSounds() {
-        // Create simple sound effects using Web Audio API
         this.sounds = {
-            sat: this.createTone(800, 0.1, 'sine'),
-            fiat: this.createTone(200, 0.2, 'sawtooth'),
-            good: this.createTone(600, 0.15, 'square'),
-            levelUp: this.createTone(1000, 0.3, 'sine'),
-            gameOver: this.createTone(150, 0.5, 'sawtooth'),
-            pause: this.createTone(400, 0.1, 'triangle')
+            collect: this.createTone(800, 0.1, 'sine'),
+            damage: this.createTone(200, 0.2, 'sawtooth'),
+            levelUp: this.createTone(1200, 0.3, 'sine'),
+            gameOver: this.createTone(150, 0.5, 'square')
         };
     }
     
     createTone(frequency, duration, type) {
         return () => {
-            if (!this.audioContext || !this.soundToggle.checked) return;
+            if (!this.audioContext || !this.soundEnabled) return;
             
             const oscillator = this.audioContext.createOscillator();
             const gainNode = this.audioContext.createGain();
@@ -198,10 +108,10 @@ class SnakeSats {
             oscillator.connect(gainNode);
             gainNode.connect(this.audioContext.destination);
             
-            oscillator.frequency.value = frequency;
+            oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
             oscillator.type = type;
             
-            gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
             
             oscillator.start(this.audioContext.currentTime);
@@ -216,185 +126,304 @@ class SnakeSats {
     }
     
     setupEventListeners() {
-        // Keyboard controls
+        // Desktop controls
         document.addEventListener('keydown', (e) => {
-            if (!this.gameRunning) return;
+            if (!this.gameRunning || this.gamePaused) return;
             
             switch(e.key) {
                 case 'ArrowUp':
                 case 'w':
                 case 'W':
-                    if (this.direction.y === 0) {
-                        this.nextDirection = {x: 0, y: -1};
+                    if (this.direction.y !== 1) {
+                        this.direction = {x: 0, y: -1};
                     }
                     break;
                 case 'ArrowDown':
                 case 's':
                 case 'S':
-                    if (this.direction.y === 0) {
-                        this.nextDirection = {x: 0, y: 1};
+                    if (this.direction.y !== -1) {
+                        this.direction = {x: 0, y: 1};
                     }
                     break;
                 case 'ArrowLeft':
                 case 'a':
                 case 'A':
-                    if (this.direction.x === 0) {
-                        this.nextDirection = {x: -1, y: 0};
+                    if (this.direction.x !== 1) {
+                        this.direction = {x: -1, y: 0};
                     }
                     break;
                 case 'ArrowRight':
                 case 'd':
                 case 'D':
-                    if (this.direction.x === 0) {
-                        this.nextDirection = {x: 1, y: 0};
+                    if (this.direction.x !== -1) {
+                        this.direction = {x: 1, y: 0};
                     }
                     break;
                 case ' ':
                 case 'p':
                 case 'P':
+                    e.preventDefault();
                     this.togglePause();
                     break;
             }
         });
         
-        // Touch controls for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
+        // Game control buttons
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const restartBtn = document.getElementById('restartBtn');
         
+        if (startBtn) startBtn.addEventListener('click', () => this.startGame());
+        if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
+        if (restartBtn) restartBtn.addEventListener('click', () => this.restartGame());
+        
+        // Mobile control buttons
+        const mobileStartBtn = document.getElementById('mobileStartBtn');
+        const mobilePauseBtn = document.getElementById('mobilePauseBtn');
+        const mobileRestartBtn = document.getElementById('mobileRestartBtn');
+        
+        if (mobileStartBtn) mobileStartBtn.addEventListener('click', () => this.startGame());
+        if (mobilePauseBtn) mobilePauseBtn.addEventListener('click', () => this.togglePause());
+        if (mobileRestartBtn) mobileRestartBtn.addEventListener('click', () => this.restartGame());
+        
+        // Sound controls
+        const soundToggle = document.getElementById('soundToggle');
+        const musicToggle = document.getElementById('musicToggle');
+        const mobileSoundToggle = document.getElementById('mobileSoundToggle');
+        const mobileMusicToggle = document.getElementById('mobileMusicToggle');
+        
+        if (soundToggle) soundToggle.addEventListener('click', () => this.toggleSound());
+        if (musicToggle) musicToggle.addEventListener('click', () => this.toggleMusic());
+        if (mobileSoundToggle) mobileSoundToggle.addEventListener('click', () => this.toggleSound());
+        if (mobileMusicToggle) mobileMusicToggle.addEventListener('click', () => this.toggleMusic());
+        
+        // Difficulty selection
+        this.setupDifficultySelection();
+        
+        // Mobile drawer controls
+        const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
+        const mobileInfoBtn = document.getElementById('mobileInfoBtn');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const closeInfoBtn = document.getElementById('closeInfoBtn');
+        
+        if (mobileSettingsBtn) mobileSettingsBtn.addEventListener('click', () => this.toggleMobileDrawer('settings'));
+        if (mobileInfoBtn) mobileInfoBtn.addEventListener('click', () => this.toggleMobileDrawer('info'));
+        if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => this.closeMobileDrawer('settings'));
+        if (closeInfoBtn) closeInfoBtn.addEventListener('click', () => this.closeMobileDrawer('info'));
+    }
+    
+    setupMobileControls() {
+        if (!this.isMobile) return;
+        
+        // Touch controls for canvas
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        });
-        
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
+            const touch = e.touches[0];
+            this.touchStartX = touch.clientX;
+            this.touchStartY = touch.clientY;
         });
         
         this.canvas.addEventListener('touchend', (e) => {
-            if (!this.gameRunning || this.gamePaused) return;
-            
             e.preventDefault();
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
+            const touch = e.changedTouches[0];
+            const deltaX = touch.clientX - this.touchStartX;
+            const deltaY = touch.clientY - this.touchStartY;
             
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
+            // Check for tap vs swipe
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            const currentTime = Date.now();
             
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                // Horizontal swipe
-                if (deltaX > 0 && this.direction.x === 0) {
-                    this.nextDirection = {x: 1, y: 0};
-                } else if (deltaX < 0 && this.direction.x === 0) {
-                    this.nextDirection = {x: -1, y: 0};
+            if (distance < 10) {
+                // Tap detected
+                if (currentTime - this.lastTapTime < 300) {
+                    // Double tap - restart game
+                    this.restartGame();
+                } else {
+                    // Single tap - pause/resume
+                    this.togglePause();
                 }
+                this.lastTapTime = currentTime;
             } else {
-                // Vertical swipe
-                if (deltaY > 0 && this.direction.y === 0) {
-                    this.nextDirection = {x: 0, y: 1};
-                } else if (deltaY < 0 && this.direction.y === 0) {
-                    this.nextDirection = {x: 0, y: -1};
+                // Swipe detected
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe
+                    if (deltaX > 0 && this.direction.x !== -1) {
+                        this.direction = {x: 1, y: 0};
+                    } else if (deltaX < 0 && this.direction.x !== 1) {
+                        this.direction = {x: -1, y: 0};
+                    }
+                } else {
+                    // Vertical swipe
+                    if (deltaY > 0 && this.direction.y !== -1) {
+                        this.direction = {x: 0, y: 1};
+                    } else if (deltaY < 0 && this.direction.y !== 1) {
+                        this.direction = {x: 0, y: -1};
+                    }
                 }
             }
         });
+    }
+    
+    toggleMobileDrawer(type) {
+        const drawer = document.getElementById(`mobile${type.charAt(0).toUpperCase() + type.slice(1)}Drawer`);
+        if (drawer) {
+            drawer.style.display = 'block';
+            setTimeout(() => {
+                drawer.classList.add('active');
+            }, 10);
+        }
+    }
+    
+    closeMobileDrawer(type) {
+        const drawer = document.getElementById(`mobile${type.charAt(0).toUpperCase() + type.slice(1)}Drawer`);
+        if (drawer) {
+            drawer.classList.remove('active');
+            setTimeout(() => {
+                drawer.style.display = 'none';
+            }, 300);
+        }
+    }
+    
+    toggleSound() {
+        this.soundEnabled = !this.soundEnabled;
+        this.updateSoundButtons();
+    }
+    
+    toggleMusic() {
+        this.musicEnabled = !this.musicEnabled;
+        this.updateSoundButtons();
+    }
+    
+    updateSoundButtons() {
+        const buttons = [
+            document.getElementById('soundToggle'),
+            document.getElementById('mobileSoundToggle')
+        ];
         
-        // Button listeners
-        this.startBtn.addEventListener('click', () => {
-            this.startGame();
+        buttons.forEach(btn => {
+            if (btn) {
+                btn.classList.toggle('active', this.soundEnabled);
+            }
         });
         
-        this.pauseBtn.addEventListener('click', () => {
-            this.togglePause();
-        });
+        const musicButtons = [
+            document.getElementById('musicToggle'),
+            document.getElementById('mobileMusicToggle')
+        ];
         
-        this.restartBtn.addEventListener('click', () => {
-            this.restartGame();
+        musicButtons.forEach(btn => {
+            if (btn) {
+                btn.classList.toggle('active', this.musicEnabled);
+            }
         });
     }
     
     setupDifficultySelection() {
-        this.difficultyButtons.forEach(btn => {
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn, .mobile-difficulty-btn');
+        
+        difficultyButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove selected class from all buttons
-                this.difficultyButtons.forEach(b => b.classList.remove('selected'));
-                // Add selected class to clicked button
-                btn.classList.add('selected');
+                const difficulty = btn.dataset.difficulty;
+                this.setDifficulty(difficulty);
                 
-                this.difficulty = btn.dataset.difficulty;
-                this.currentDifficultyElement.textContent = this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1);
+                // Update all difficulty buttons
+                document.querySelectorAll('.difficulty-btn, .mobile-difficulty-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                document.querySelectorAll(`[data-difficulty="${difficulty}"]`).forEach(b => {
+                    b.classList.add('active');
+                });
+            });
+        });
+    }
+    
+    setDifficulty(difficulty) {
+        this.difficulty = difficulty;
+        this.updateStats();
+    }
+    
+    setupCollapsibleSections() {
+        const toggles = document.querySelectorAll('.section-toggle');
+        
+        toggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const section = toggle.closest('.control-section');
+                const isActive = section.classList.contains('active');
                 
-                this.showMessage(`${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)} difficulty selected!`);
+                // Close all sections
+                document.querySelectorAll('.control-section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                // Open clicked section if it wasn't active
+                if (!isActive) {
+                    section.classList.add('active');
+                }
             });
         });
         
-        // Default to normal difficulty
-        this.difficultyButtons[1].click();
+        // Auto-expand game controls on desktop
+        if (!this.isMobile) {
+            const gameControlsSection = document.querySelector('.control-section');
+            if (gameControlsSection) {
+                gameControlsSection.classList.add('active');
+            }
+        }
+    }
+    
+    startGame() {
+        if (this.gameRunning) return;
+        
+        this.gameRunning = true;
+        this.gamePaused = false;
+        this.direction = {x: 1, y: 0};
+        this.snake = [{x: 10, y: 10}];
+        this.sats = [];
+        this.fiats = [];
+        this.dos = [];
+        this.score = 0;
+        this.level = 1;
+        this.health = 100;
+        this.satsCollected = 0;
+        this.goodPractices = 0;
+        this.fiatHit = 0;
+        
+        this.updateButtonStates();
+        this.hideMessage();
+        this.gameLoop();
+    }
+    
+    restartGame() {
+        this.gameRunning = false;
+        this.gamePaused = false;
+        this.startGame();
     }
     
     togglePause() {
         if (!this.gameRunning) return;
         
         this.gamePaused = !this.gamePaused;
+        this.updateButtonStates();
         
         if (this.gamePaused) {
-            this.playSound('pause');
-            this.pauseBtn.textContent = 'Resume';
-            this.showMessage('Game Paused - Press Space or P to resume');
+            this.showMessage('Game Paused - Press P or tap to resume');
         } else {
-            this.pauseBtn.textContent = 'Pause';
-            this.showMessage('Game Resumed!');
+            this.hideMessage();
             this.gameLoop();
         }
     }
     
-    startGame() {
-        if (this.difficulty === '') {
-            this.showMessage('Please select a difficulty level first!');
-            return;
-        }
+    updateButtonStates() {
+        const buttons = [
+            { start: document.getElementById('startBtn'), pause: document.getElementById('pauseBtn'), restart: document.getElementById('restartBtn') },
+            { start: document.getElementById('mobileStartBtn'), pause: document.getElementById('mobilePauseBtn'), restart: document.getElementById('mobileRestartBtn') }
+        ];
         
-        this.gameRunning = true;
-        this.gamePaused = false;
-        this.score = 0;
-        this.level = 1;
-        this.health = this.maxHealth;
-        this.satsCollected = 0;
-        this.goodPractices = 0;
-        this.fiatHit = 0;
-        
-        // Set difficulty-based settings
-        const settings = this.difficultySettings[this.difficulty];
-        this.speed = settings.speed;
-        this.speedIncrease = settings.speedIncrease;
-        
-        // Initialize snake
-        this.snake = [{x: 10, y: 10}];
-        this.direction = {x: 1, y: 0};
-        this.nextDirection = {x: 1, y: 0};
-        
-        // Clear game objects
-        this.sats = [];
-        this.fiats = [];
-        this.dos = [];
-        
-        // Update UI
-        this.startBtn.classList.add('hidden');
-        this.pauseBtn.classList.remove('hidden');
-        this.pauseBtn.textContent = 'Pause';
-        this.restartBtn.classList.add('hidden');
-        this.showMessage("Game started! Use arrow keys or swipe to control the snake.");
-        
-        // Generate initial objects
-        this.generateSat();
-        this.generateFiat();
-        this.generateDo();
-        
-        // Start game loop
-        this.gameLoop();
-    }
-    
-    restartGame() {
-        this.startGame();
+        buttons.forEach(btnSet => {
+            if (btnSet.start) btnSet.start.disabled = this.gameRunning;
+            if (btnSet.pause) btnSet.pause.disabled = !this.gameRunning;
+            if (btnSet.restart) btnSet.restart.disabled = !this.gameRunning;
+        });
     }
     
     gameLoop() {
@@ -403,124 +432,104 @@ class SnakeSats {
         this.update();
         this.draw();
         
-        setTimeout(() => {
-            requestAnimationFrame(() => this.gameLoop());
-        }, this.speed);
+        const speed = this.difficultySettings[this.difficulty].speed;
+        setTimeout(() => this.gameLoop(), speed);
     }
     
     update() {
-        // Update direction
-        this.direction = {...this.nextDirection};
-        
         // Move snake
-        const head = {...this.snake[0]};
-        head.x += this.direction.x;
-        head.y += this.direction.y;
+        const head = {x: this.snake[0].x + this.direction.x, y: this.snake[0].y + this.direction.y};
         
         // Check wall collision
-        if (head.x < 0 || head.x >= this.canvas.width / this.gridSize ||
-            head.y < 0 || head.y >= this.canvas.height / this.gridSize) {
-            this.gameOver('Wall collision!');
+        const gridWidth = this.canvas.width / this.gridSize;
+        const gridHeight = this.canvas.height / this.gridSize;
+        
+        if (head.x < 0 || head.x >= gridWidth || head.y < 0 || head.y >= gridHeight) {
+            this.gameOver();
             return;
         }
         
         // Check self collision
-        for (let segment of this.snake) {
-            if (head.x === segment.x && head.y === segment.y) {
-                this.gameOver('Self collision!');
-                return;
-            }
+        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+            this.gameOver();
+            return;
         }
         
-        // Add new head
         this.snake.unshift(head);
         
-        // Check sat collision
-        let satEaten = false;
-        this.sats = this.sats.filter(sat => {
-            if (head.x === sat.x && head.y === sat.y) {
-                this.score += 10;
-                this.satsCollected++;
-                this.health = Math.min(this.maxHealth, this.health + this.difficultySettings[this.difficulty].healthGain);
-                satEaten = true;
-                this.updateScore();
-                this.updateStats();
-                this.updateTip();
-                this.playSound('sat');
-                this.showMessage(`Sat collected! +10 points, +${this.difficultySettings[this.difficulty].healthGain} health`);
-                return false;
-            }
-            return true;
-        });
-        
-        // Check fiat collision
-        this.fiats.forEach(fiat => {
-            if (head.x === fiat.x && head.y === fiat.y) {
-                this.health -= this.difficultySettings[this.difficulty].fiatDamage;
-                this.fiatHit++;
-                this.playSound('fiat');
-                this.showMessage(this.getRandomMessage(this.fiatMessages));
-                
-                if (this.health <= 0) {
-                    this.gameOver('Health depleted!');
-                    return;
-                }
-            }
-        });
-        
-        // Check do collision (safe passage)
-        this.dos.forEach(doItem => {
-            if (head.x === doItem.x && head.y === doItem.y) {
-                this.score += 5; // Bonus for good practices
-                this.goodPractices++;
-                this.health = Math.min(this.maxHealth, this.health + 5);
-                this.updateScore();
-                this.updateStats();
-                this.updateTip();
-                this.playSound('good');
-                this.showMessage("Good practice! +5 points, +5 health");
-            }
-        });
-        
-        // Generate new objects
-        if (this.sats.length === 0) {
+        // Check sat collection
+        const satIndex = this.sats.findIndex(sat => sat.x === head.x && sat.y === head.y);
+        if (satIndex !== -1) {
+            this.sats.splice(satIndex, 1);
+            this.score += 10;
+            this.satsCollected++;
+            this.health = Math.min(this.maxHealth, this.health + this.difficultySettings[this.difficulty].healthGain);
+            this.playSound('collect');
             this.generateSat();
         }
         
-        if (this.fiats.length === 0 && Math.random() < this.difficultySettings[this.difficulty].fiatSpawnRate) {
+        // Check fiat collision
+        const fiatIndex = this.fiats.findIndex(fiat => fiat.x === head.x && fiat.y === head.y);
+        if (fiatIndex !== -1) {
+            this.fiats.splice(fiatIndex, 1);
+            this.health -= this.difficultySettings[this.difficulty].fiatDamage;
+            this.fiatHit++;
+            this.playSound('damage');
             this.generateFiat();
         }
         
-        if (this.dos.length === 0) {
+        // Check do collection
+        const doIndex = this.dos.findIndex(doItem => doItem.x === head.x && doItem.y === head.y);
+        if (doIndex !== -1) {
+            this.dos.splice(doIndex, 1);
+            this.score += 20;
+            this.goodPractices++;
+            this.playSound('collect');
             this.generateDo();
         }
         
-        // Level up based on health and score
-        if (this.score > 0 && this.score % 50 === 0 && this.health >= 50) {
+        // Remove tail if no sat collected
+        if (satIndex === -1 && fiatIndex === -1 && doIndex === -1) {
+            this.snake.pop();
+        }
+        
+        // Generate objects
+        if (Math.random() < 0.02) this.generateSat();
+        if (Math.random() < this.difficultySettings[this.difficulty].fiatSpawnRate * 0.01) this.generateFiat();
+        if (Math.random() < 0.01) this.generateDo();
+        
+        // Check level up
+        if (this.score >= this.level * 100 && this.health >= 50) {
             this.levelUp();
         }
         
-        // Remove tail if no sat eaten
-        if (!satEaten) {
-            this.snake.pop();
+        // Check game over
+        if (this.health <= 0) {
+            this.gameOver();
+            return;
         }
+        
+        this.updateStats();
+        this.updateMobileStats();
     }
     
     draw() {
         // Clear canvas
-        this.ctx.fillStyle = '#0a0e14';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw grid (subtle)
-        this.ctx.strokeStyle = '#1a2332';
-        this.ctx.lineWidth = 0.5;
-        for (let x = 0; x < this.canvas.width; x += this.gridSize) {
+        // Draw grid
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.lineWidth = 1;
+        
+        for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(x, 0);
             this.ctx.lineTo(x, this.canvas.height);
             this.ctx.stroke();
         }
-        for (let y = 0; y < this.canvas.height; y += this.gridSize) {
+        
+        for (let y = 0; y <= this.canvas.height; y += this.gridSize) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, y);
             this.ctx.lineTo(this.canvas.width, y);
@@ -528,224 +537,216 @@ class SnakeSats {
         }
         
         // Draw snake
+        this.ctx.fillStyle = '#ffd700';
         this.snake.forEach((segment, index) => {
             if (index === 0) {
                 // Head
-                this.ctx.fillStyle = '#f7931a';
-                this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
-                
-                // Eyes
-                this.ctx.fillStyle = '#0a0e14';
-                const eyeSize = 3;
-                const eyeOffset = 5;
-                this.ctx.fillRect(segment.x * this.gridSize + eyeOffset, segment.y * this.gridSize + eyeOffset, eyeSize, eyeSize);
-                this.ctx.fillRect(segment.x * this.gridSize + this.gridSize - eyeOffset - eyeSize, segment.y * this.gridSize + eyeOffset, eyeSize, eyeSize);
+                this.ctx.fillStyle = '#ffed4e';
             } else {
                 // Body
-                this.ctx.fillStyle = `hsl(35, 100%, ${60 - index * 2}%)`;
-                this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize, this.gridSize);
+                this.ctx.fillStyle = '#ffd700';
             }
+            this.ctx.fillRect(
+                segment.x * this.gridSize + 2,
+                segment.y * this.gridSize + 2,
+                this.gridSize - 4,
+                this.gridSize - 4
+            );
         });
         
         // Draw sats
+        this.ctx.fillStyle = '#4CAF50';
         this.sats.forEach(sat => {
-            this.ctx.fillStyle = '#f7931a';
-            this.ctx.beginPath();
-            this.ctx.arc(
-                sat.x * this.gridSize + this.gridSize / 2,
-                sat.y * this.gridSize + this.gridSize / 2,
-                this.gridSize / 2 - 2,
-                0,
-                2 * Math.PI
+            this.ctx.fillRect(
+                sat.x * this.gridSize + 4,
+                sat.y * this.gridSize + 4,
+                this.gridSize - 8,
+                this.gridSize - 8
             );
-            this.ctx.fill();
-            
-            // Sat symbol
-            this.ctx.fillStyle = '#0a0e14';
-            this.ctx.font = '12px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('₿', sat.x * this.gridSize + this.gridSize / 2, sat.y * this.gridSize + this.gridSize / 2 + 4);
         });
         
-        // Draw fiats (dollar signs)
+        // Draw fiats
+        this.ctx.fillStyle = '#f44336';
         this.fiats.forEach(fiat => {
-            this.ctx.fillStyle = '#ff6b6b';
-            this.ctx.fillRect(fiat.x * this.gridSize, fiat.y * this.gridSize, this.gridSize, this.gridSize);
-            
-            // Dollar symbol
-            this.ctx.fillStyle = '#0a0e14';
-            this.ctx.font = '14px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('💵', fiat.x * this.gridSize + this.gridSize / 2, fiat.y * this.gridSize + this.gridSize / 2 + 4);
+            this.ctx.fillRect(
+                fiat.x * this.gridSize + 4,
+                fiat.y * this.gridSize + 4,
+                this.gridSize - 8,
+                this.gridSize - 8
+            );
         });
         
-        // Draw do's (green paths)
+        // Draw dos
+        this.ctx.fillStyle = '#2196F3';
         this.dos.forEach(doItem => {
-            this.ctx.fillStyle = '#51cf66';
-            this.ctx.fillRect(doItem.x * this.gridSize, doItem.y * this.gridSize, this.gridSize, this.gridSize);
-            
-            // Checkmark symbol
-            this.ctx.fillStyle = '#0a0e14';
-            this.ctx.font = '14px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('✅', doItem.x * this.gridSize + this.gridSize / 2, doItem.y * this.gridSize + this.gridSize / 2 + 4);
+            this.ctx.fillRect(
+                doItem.x * this.gridSize + 4,
+                doItem.y * this.gridSize + 4,
+                this.gridSize - 8,
+                this.gridSize - 8
+            );
         });
-        
-        // Draw health bar
-        this.drawHealthBar();
-    }
-    
-    drawHealthBar() {
-        const barWidth = 200;
-        const barHeight = 10;
-        const x = (this.canvas.width - barWidth) / 2;
-        const y = this.canvas.height - 20;
-        
-        // Background
-        this.ctx.fillStyle = '#333';
-        this.ctx.fillRect(x, y, barWidth, barHeight);
-        
-        // Health bar
-        const healthWidth = (this.health / this.maxHealth) * barWidth;
-        const healthColor = this.health > 50 ? '#51cf66' : this.health > 25 ? '#ffd43b' : '#ff6b6b';
-        this.ctx.fillStyle = healthColor;
-        this.ctx.fillRect(x, y, healthWidth, barHeight);
-        
-        // Border
-        this.ctx.strokeStyle = '#f7931a';
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(x, y, barWidth, barHeight);
     }
     
     generateSat() {
-        const sat = this.getRandomPosition();
-        this.sats.push(sat);
+        const position = this.getRandomPosition();
+        if (position) {
+            this.sats.push(position);
+        }
     }
     
     generateFiat() {
-        const fiat = this.getRandomPosition();
-        this.fiats.push(fiat);
+        const position = this.getRandomPosition();
+        if (position) {
+            this.fiats.push(position);
+        }
     }
     
     generateDo() {
-        const doItem = this.getRandomPosition();
-        this.dos.push(doItem);
+        const position = this.getRandomPosition();
+        if (position) {
+            this.dos.push(position);
+        }
     }
     
     getRandomPosition() {
-        const maxX = Math.floor(this.canvas.width / this.gridSize);
-        const maxY = Math.floor(this.canvas.height / this.gridSize);
+        const gridWidth = this.canvas.width / this.gridSize;
+        const gridHeight = this.canvas.height / this.gridSize;
         
-        let position;
-        do {
-            position = {
-                x: Math.floor(Math.random() * maxX),
-                y: Math.floor(Math.random() * maxY)
-            };
-        } while (this.isPositionOccupied(position));
-        
-        return position;
+        for (let attempts = 0; attempts < 50; attempts++) {
+            const x = Math.floor(Math.random() * gridWidth);
+            const y = Math.floor(Math.random() * gridHeight);
+            
+            if (!this.isPositionOccupied(x, y)) {
+                return {x, y};
+            }
+        }
+        return null;
     }
     
-    isPositionOccupied(pos) {
-        // Check snake
-        for (let segment of this.snake) {
-            if (pos.x === segment.x && pos.y === segment.y) return true;
-        }
-        
-        // Check sats
-        for (let sat of this.sats) {
-            if (pos.x === sat.x && pos.y === sat.y) return true;
-        }
-        
-        // Check fiats
-        for (let fiat of this.fiats) {
-            if (pos.x === fiat.x && pos.y === fiat.y) return true;
-        }
-        
-        // Check do's
-        for (let doItem of this.dos) {
-            if (pos.x === doItem.x && pos.y === doItem.y) return true;
-        }
-        
-        return false;
+    isPositionOccupied(x, y) {
+        return this.snake.some(segment => segment.x === x && segment.y === y) ||
+               this.sats.some(sat => sat.x === x && sat.y === y) ||
+               this.fiats.some(fiat => fiat.x === x && fiat.y === y) ||
+               this.dos.some(doItem => doItem.x === x && doItem.y === y);
     }
     
     levelUp() {
         this.level++;
-        this.speed = Math.max(50, this.speed - this.speedIncrease);
-        this.levelElement.textContent = this.level;
         this.playSound('levelUp');
-        
-        // Show level up message
-        this.showMessage(`Level ${this.level}! Speed increased! Health: ${this.health}`);
+        this.showMessage(`Level ${this.level}! Keep stacking those sats! 🚀`);
+        setTimeout(() => this.hideMessage(), 2000);
     }
     
-    gameOver(message) {
+    gameOver() {
         this.gameRunning = false;
         this.gamePaused = false;
         
-        // Update best score
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
-            localStorage.setItem('snakesats-best', this.bestScore);
-            this.bestScoreElement.textContent = this.bestScore;
+            localStorage.setItem('snakeSatsBestScore', this.bestScore);
         }
         
         this.playSound('gameOver');
-        
-        // Update UI
-        this.showMessage(`Game Over! ${message} Final Score: ${this.score} sats`);
-        this.pauseBtn.classList.add('hidden');
-        this.restartBtn.classList.remove('hidden');
+        this.showMessage(`Game Over! Final Score: ${this.score} | Best: ${this.bestScore}`);
+        this.updateButtonStates();
+        this.updateStats();
+        this.updateMobileStats();
     }
     
     updateScore() {
-        this.scoreElement.textContent = this.score;
-        this.currentScoreElement.textContent = this.score;
-        this.healthElement.textContent = this.health;
+        const scoreElements = [
+            document.getElementById('score'),
+            document.getElementById('mobile-score')
+        ];
+        
+        scoreElements.forEach(el => {
+            if (el) el.textContent = this.score;
+        });
     }
     
     updateStats() {
-        this.snakeLengthElement.textContent = this.snake.length;
-        this.satsCollectedElement.textContent = this.satsCollected;
-        this.goodPracticesElement.textContent = this.goodPractices;
+        // Desktop stats
+        const elements = {
+            'satsCollected': this.satsCollected,
+            'snakeLength': this.snake.length,
+            'goodPractices': this.goodPractices,
+            'currentLevel': this.level,
+            'currentDifficulty': this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)
+        };
+        
+        Object.entries(elements).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        });
+        
+        this.updateScore();
+        
+        // Update tip content
+        const tipContent = document.getElementById('tipContent');
+        if (tipContent) {
+            tipContent.innerHTML = `<p>${this.getRandomMessage()}</p>`;
+        }
     }
     
-    updateTip() {
-        const tip = this.getRandomMessage(this.bitcoinTips);
-        this.tipDisplay.textContent = tip;
+    updateMobileStats() {
+        if (!this.isMobile) return;
+        
+        // Update mobile header stats
+        const mobileElements = {
+            'mobile-score': this.score,
+            'mobile-level': this.level,
+            'mobile-health': this.health,
+            'mobile-best': this.bestScore
+        };
+        
+        Object.entries(mobileElements).forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        });
+        
+        // Update health bar
+        const healthFill = document.getElementById('mobileHealthFill');
+        const healthText = document.getElementById('mobileHealthText');
+        
+        if (healthFill) {
+            healthFill.style.width = `${this.health}%`;
+        }
+        
+        if (healthText) {
+            healthText.textContent = this.health;
+        }
     }
     
-    getRandomMessage(messages) {
+    getRandomMessage() {
+        const messages = [
+            "💡 Stack sats regularly - consistency beats timing!",
+            "🔒 Self-custody is key - not your keys, not your coins!",
+            "📈 DCA (Dollar Cost Average) reduces emotional trading",
+            "❄️ Cold storage keeps your Bitcoin safe from hackers",
+            "🚫 Avoid FOMO - stick to your investment plan",
+            "💰 Bitcoin is scarce - only 21 million will ever exist",
+            "⚡ Lightning Network enables fast, cheap transactions",
+            "🌍 Bitcoin is global money for the internet age"
+        ];
         return messages[Math.floor(Math.random() * messages.length)];
     }
     
-    showMessage(message) {
-        this.gameMessage.textContent = message;
-        
-        // Clear message after 3 seconds
-        setTimeout(() => {
-            if (this.gameMessage.textContent === message) {
-                this.gameMessage.textContent = '';
-            }
-        }, 3000);
+    showMessage(text) {
+        if (this.gameMessage) {
+            this.gameMessage.textContent = text;
+            this.gameMessage.style.display = 'block';
+        }
+    }
+    
+    hideMessage() {
+        if (this.gameMessage) {
+            this.gameMessage.style.display = 'none';
+        }
     }
 }
 
-// Add fadeInOut animation to CSS
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeInOut {
-        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-        20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-        80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    }
-`;
-document.head.appendChild(style);
-
-// Initialize game when page loads
+// Initialize game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new SnakeSats();
 }); 

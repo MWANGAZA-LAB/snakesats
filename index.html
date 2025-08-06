@@ -4,188 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SnakeSats - Bitcoin Education Game</title>
+    <meta name="description" content="Learn Bitcoin investment best practices through fun snake gameplay. Collect sats, avoid fiat, and master crypto fundamentals!">
+    <meta name="keywords" content="Bitcoin, crypto education, snake game, sats, cryptocurrency, investment, blockchain">
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Learn Bitcoin investment best practices through classic Snake gameplay. Stack sats, avoid bad habits, and become a better Bitcoin investor!">
-    <meta name="keywords" content="bitcoin, education, game, snake, crypto, investment, sats, blockchain">
-    <meta name="author" content="SnakeSats Team">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="SnakeSats - Bitcoin Education Game">
-    <meta property="og:description" content="Learn Bitcoin investment best practices through classic Snake gameplay. Stack sats, avoid bad habits, and become a better Bitcoin investor!">
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mwanga-lab.github.io/snakesats">
-    <meta property="og:image" content="https://mwanga-lab.github.io/snakesats/og-image.png">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SnakeSats - Bitcoin Education Game">
-    <meta name="twitter:description" content="Learn Bitcoin investment best practices through classic Snake gameplay. Stack sats, avoid bad habits, and become a better Bitcoin investor!">
-    <meta name="twitter:image" content="https://mwanga-lab.github.io/snakesats/og-image.png">
-    
-    <!-- Favicon -->
+    <meta property="og:url" content="https://mwangaza-lab.github.io/snakesats/">
+    <meta property="og:title" content="SnakeSats - Bitcoin Education Game">
+    <meta property="og:description" content="Learn Bitcoin investment best practices through fun snake gameplay. Collect sats, avoid fiat, and master crypto fundamentals!">
+    <meta property="og:image" content="https://mwangaza-lab.github.io/snakesats/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mwangaza-lab.github.io/snakesats/">
+    <meta property="twitter:title" content="SnakeSats - Bitcoin Education Game">
+    <meta property="twitter:description" content="Learn Bitcoin investment best practices through fun snake gameplay. Collect sats, avoid fiat, and master crypto fundamentals!">
+    <meta property="twitter:image" content="https://mwangaza-lab.github.io/snakesats/og-image.png">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-container">
-        <!-- Header Section -->
-        <header class="game-header">
-            <h1 class="game-title">🐍 SnakeSats</h1>
-            <div class="score-board">
-                <div class="score-item">
-                    <span class="label">Sats:</span>
-                    <span id="score" class="value">0</span>
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="mobile-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Sats</span>
+                    <span class="stat-value" id="mobile-score">0</span>
                 </div>
-                <div class="score-item">
-                    <span class="label">Level:</span>
-                    <span id="level" class="value">1</span>
+                <div class="stat-item">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="mobile-level">1</span>
                 </div>
-                <div class="score-item">
-                    <span class="label">Health:</span>
-                    <span id="health" class="value">100</span>
+                <div class="stat-item">
+                    <span class="stat-label">Health</span>
+                    <span class="stat-value" id="mobile-health">100</span>
                 </div>
-                <div class="score-item">
-                    <span class="label">Best:</span>
-                    <span id="best-score" class="value">0</span>
+                <div class="stat-item">
+                    <span class="stat-label">Best</span>
+                    <span class="stat-value" id="mobile-best">0</span>
                 </div>
             </div>
         </header>
 
-        <!-- Main Game Section -->
+        <!-- Desktop Header -->
+        <header class="desktop-header">
+            <h1>🐍 SnakeSats</h1>
+            <p>Learn Bitcoin investment best practices through gameplay!</p>
+        </header>
+
+        <!-- Main Content -->
         <div class="main-content">
-            <!-- Left Panel - Game Controls -->
-            <div class="left-panel">
-                <!-- Game Controls -->
-                <div class="control-section">
-                    <button class="section-toggle" data-section="game-controls">
+            <!-- Left Panel - Desktop Only -->
+            <div class="left-panel desktop-only">
+                <div class="control-section active">
+                    <button class="section-toggle">
                         <span class="toggle-icon">🎮</span>
                         Game Controls
                         <span class="toggle-arrow">▼</span>
                     </button>
-                    <div class="section-content" id="game-controls">
+                    <div class="section-content">
                         <div class="game-buttons">
-                            <button id="start-btn" class="btn-primary">Start Game</button>
-                            <button id="pause-btn" class="btn-secondary hidden">Pause</button>
-                            <button id="restart-btn" class="btn-secondary hidden">Play Again</button>
-                        </div>
-                        <div class="game-status">
-                            <div id="game-message" class="status-message"></div>
+                            <button id="startBtn" class="game-btn primary">Start Game</button>
+                            <button id="pauseBtn" class="game-btn secondary" disabled>Pause</button>
+                            <button id="restartBtn" class="game-btn secondary" disabled>Restart</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- How to Play -->
                 <div class="control-section">
-                    <button class="section-toggle" data-section="how-to-play">
-                        <span class="toggle-icon">❓</span>
+                    <button class="section-toggle">
+                        <span class="toggle-icon">📖</span>
                         How to Play
-                        <span class="toggle-arrow">▼</span>
+                        <span class="toggle-arrow">▶</span>
                     </button>
-                    <div class="section-content" id="how-to-play">
-                        <ul class="game-rules">
-                            <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
-                            <li>💵 <strong>Avoid Fiat</strong> - Dollar signs (bad investment habits)</li>
-                            <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
-                            <li>❤️ <strong>Health System</strong> - More sats = more health</li>
-                        </ul>
+                    <div class="section-content">
+                        <div class="game-rules">
+                            <p><strong>🐍 Snake:</strong> Control the snake to collect sats and grow!</p>
+                            <p><strong>💰 Sats:</strong> Collect these to earn points and health</p>
+                            <p><strong>💸 Fiats:</strong> Avoid these - they reduce health</p>
+                            <p><strong>✅ Do's:</strong> Collect these for bonus points</p>
+                            <p><strong>🎯 Goal:</strong> Reach level 10 with high health!</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Controls -->
                 <div class="control-section">
-                    <button class="section-toggle" data-section="controls">
+                    <button class="section-toggle">
                         <span class="toggle-icon">⌨️</span>
                         Controls
-                        <span class="toggle-arrow">▼</span>
+                        <span class="toggle-arrow">▶</span>
                     </button>
-                    <div class="section-content" id="controls">
+                    <div class="section-content">
                         <div class="control-info">
-                            <p><strong>Desktop:</strong> Arrow keys or WASD</p>
-                            <p><strong>Mobile:</strong> Swipe to change direction</p>
-                            <p><strong>Pause:</strong> Spacebar or P key</p>
+                            <p><strong>Arrow Keys:</strong> Move snake</p>
+                            <p><strong>WASD:</strong> Alternative movement</p>
+                            <p><strong>Space/P:</strong> Pause/Resume</p>
+                            <p><strong>Touch:</strong> Swipe to move (mobile)</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Game Level -->
                 <div class="control-section">
-                    <button class="section-toggle" data-section="game-level">
-                        <span class="toggle-icon">🎯</span>
-                        Select Level
-                        <span class="toggle-arrow">▼</span>
+                    <button class="section-toggle">
+                        <span class="toggle-icon">⚡</span>
+                        Game Level
+                        <span class="toggle-arrow">▶</span>
                     </button>
-                    <div class="section-content" id="game-level">
-                        <div class="difficulty-options">
-                            <button class="difficulty-btn" data-difficulty="beginner">
-                                <span class="difficulty-icon">🌱</span>
-                                <span class="difficulty-name">Beginner</span>
-                            </button>
-                            <button class="difficulty-btn" data-difficulty="normal">
-                                <span class="difficulty-icon">⚡</span>
-                                <span class="difficulty-name">Normal</span>
-                            </button>
-                            <button class="difficulty-btn" data-difficulty="legendary">
-                                <span class="difficulty-icon">🔥</span>
-                                <span class="difficulty-name">Legendary</span>
-                            </button>
+                    <div class="section-content">
+                        <div class="difficulty-panel">
+                            <h4>Select Difficulty:</h4>
+                            <div class="difficulty-options">
+                                <button class="difficulty-btn active" data-difficulty="beginner">Beginner</button>
+                                <button class="difficulty-btn" data-difficulty="normal">Normal</button>
+                                <button class="difficulty-btn" data-difficulty="legendary">Legendary</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sound Settings -->
                 <div class="control-section">
-                    <button class="section-toggle" data-section="sound-settings">
+                    <button class="section-toggle">
                         <span class="toggle-icon">🔊</span>
                         Sound Settings
-                        <span class="toggle-arrow">▼</span>
+                        <span class="toggle-arrow">▶</span>
                     </button>
-                    <div class="section-content" id="sound-settings">
-                        <div class="sound-controls">
-                            <label>
-                                <input type="checkbox" id="sound-toggle" checked>
-                                Sound Effects
-                            </label>
-                            <label>
-                                <input type="checkbox" id="music-toggle" checked>
-                                Background Music
-                            </label>
+                    <div class="section-content">
+                        <div class="sound-panel">
+                            <div class="sound-controls">
+                                <button id="soundToggle" class="sound-btn active">
+                                    <span class="sound-icon">🔊</span> Sound
+                                </button>
+                                <button id="musicToggle" class="sound-btn active">
+                                    <span class="music-icon">🎵</span> Music
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Game Elements -->
                 <div class="control-section">
-                    <button class="section-toggle" data-section="game-elements">
-                        <span class="toggle-icon">🎲</span>
+                    <button class="section-toggle">
+                        <span class="toggle-icon">🎯</span>
                         Game Elements
-                        <span class="toggle-arrow">▼</span>
+                        <span class="toggle-arrow">▶</span>
                     </button>
-                    <div class="section-content" id="game-elements">
+                    <div class="section-content">
                         <div class="element-legend">
                             <div class="element-item">
                                 <span class="element-symbol">🐍</span>
-                                <span class="element-text">Your Snake</span>
+                                <span class="element-text">Snake (You)</span>
                             </div>
                             <div class="element-item">
-                                <span class="element-symbol">🟡</span>
-                                <span class="element-text">Sats (Collect)</span>
+                                <span class="element-symbol">💰</span>
+                                <span class="element-text">Sats (Points + Health)</span>
                             </div>
                             <div class="element-item">
-                                <span class="element-symbol">💵</span>
-                                <span class="element-text">Fiat (Avoid)</span>
+                                <span class="element-symbol">💸</span>
+                                <span class="element-text">Fiat (Avoid - Health Loss)</span>
                             </div>
                             <div class="element-item">
                                 <span class="element-symbol">✅</span>
-                                <span class="element-text">Do's (Pass Through)</span>
-                            </div>
-                            <div class="element-item">
-                                <span class="element-symbol">❤️</span>
-                                <span class="element-text">Health Points</span>
+                                <span class="element-text">Do's (Bonus Points)</span>
                             </div>
                         </div>
                     </div>
@@ -194,48 +175,153 @@
 
             <!-- Center Panel - Game Canvas -->
             <div class="center-panel">
-                <canvas id="gameCanvas" width="600" height="400"></canvas>
+                <div class="game-area">
+                    <canvas id="gameCanvas" width="400" height="400"></canvas>
+                    <div class="game-message" id="gameMessage"></div>
+                </div>
                 
-                <!-- Bitcoin Tips -->
-                <div class="tips-panel">
-                    <h3>💡 Bitcoin Tip:</h3>
-                    <div id="tip-display" class="tip-text">
-                        Stack sats regularly and practice self-custody!
+                <!-- Mobile Game Stats -->
+                <div class="mobile-game-stats">
+                    <div class="health-bar-container">
+                        <div class="health-bar" id="mobileHealthBar">
+                            <div class="health-fill" id="mobileHealthFill"></div>
+                        </div>
+                        <span class="health-text">Health: <span id="mobileHealthText">100</span>%</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel - Game Stats -->
-            <div class="right-panel">
-                <div class="stats-panel">
-                    <h3>📊 Game Stats</h3>
-                    <div class="stat-item">
-                        <span class="stat-label">Current Score:</span>
-                        <span id="current-score" class="stat-value">0</span>
+            <!-- Right Panel - Desktop Only -->
+            <div class="right-panel desktop-only">
+                <div class="info-panel">
+                    <h3>Game Stats</h3>
+                    <div class="stats-panel">
+                        <div class="stat-row">
+                            <span class="stat-label">Sats Collected:</span>
+                            <span class="stat-value" id="satsCollected">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Snake Length:</span>
+                            <span class="stat-value" id="snakeLength">1</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Good Practices:</span>
+                            <span class="stat-value" id="goodPractices">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Current Level:</span>
+                            <span class="stat-value" id="currentLevel">1</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Difficulty:</span>
+                            <span class="stat-value" id="currentDifficulty">Beginner</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Snake Length:</span>
-                        <span id="snake-length" class="stat-value">1</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Sats Collected:</span>
-                        <span id="sats-collected" class="stat-value">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Good Practices:</span>
-                        <span id="good-practices" class="stat-value">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Difficulty:</span>
-                        <span id="current-difficulty" class="stat-value">-</span>
+                </div>
+
+                <div class="tips-panel">
+                    <h3>💡 Bitcoin Tips</h3>
+                    <div class="tip-content" id="tipContent">
+                        <p>Welcome to SnakeSats! Learn Bitcoin best practices while playing.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer Section -->
+        <!-- Mobile Bottom Control Bar -->
+        <div class="mobile-control-bar">
+            <div class="mobile-controls">
+                <button id="mobileStartBtn" class="mobile-btn primary">Start</button>
+                <button id="mobilePauseBtn" class="mobile-btn secondary" disabled>Pause</button>
+                <button id="mobileRestartBtn" class="mobile-btn secondary" disabled>Restart</button>
+            </div>
+            <div class="mobile-settings">
+                <button id="mobileSettingsBtn" class="mobile-btn icon-btn">⚙️</button>
+                <button id="mobileInfoBtn" class="mobile-btn icon-btn">ℹ️</button>
+            </div>
+        </div>
+
+        <!-- Mobile Settings Drawer -->
+        <div class="mobile-drawer" id="mobileSettingsDrawer">
+            <div class="drawer-header">
+                <h3>Settings</h3>
+                <button class="drawer-close" id="closeSettingsBtn">✕</button>
+            </div>
+            <div class="drawer-content">
+                <div class="mobile-section">
+                    <h4>Difficulty</h4>
+                    <div class="mobile-difficulty-options">
+                        <button class="mobile-difficulty-btn active" data-difficulty="beginner">Beginner</button>
+                        <button class="mobile-difficulty-btn" data-difficulty="normal">Normal</button>
+                        <button class="mobile-difficulty-btn" data-difficulty="legendary">Legendary</button>
+                    </div>
+                </div>
+                <div class="mobile-section">
+                    <h4>Sound</h4>
+                    <div class="mobile-sound-controls">
+                        <button id="mobileSoundToggle" class="mobile-sound-btn active">
+                            <span class="sound-icon">🔊</span> Sound
+                        </button>
+                        <button id="mobileMusicToggle" class="mobile-sound-btn active">
+                            <span class="music-icon">🎵</span> Music
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Info Drawer -->
+        <div class="mobile-drawer" id="mobileInfoDrawer">
+            <div class="drawer-header">
+                <h3>How to Play</h3>
+                <button class="drawer-close" id="closeInfoBtn">✕</button>
+            </div>
+            <div class="drawer-content">
+                <div class="mobile-section">
+                    <h4>Game Rules</h4>
+                    <div class="mobile-game-rules">
+                        <p><strong>🐍 Snake:</strong> Control the snake to collect sats and grow!</p>
+                        <p><strong>💰 Sats:</strong> Collect these to earn points and health</p>
+                        <p><strong>💸 Fiats:</strong> Avoid these - they reduce health</p>
+                        <p><strong>✅ Do's:</strong> Collect these for bonus points</p>
+                        <p><strong>🎯 Goal:</strong> Reach level 10 with high health!</p>
+                    </div>
+                </div>
+                <div class="mobile-section">
+                    <h4>Controls</h4>
+                    <div class="mobile-control-info">
+                        <p><strong>Swipe:</strong> Move snake in any direction</p>
+                        <p><strong>Tap:</strong> Pause/Resume game</p>
+                        <p><strong>Double Tap:</strong> Restart game</p>
+                    </div>
+                </div>
+                <div class="mobile-section">
+                    <h4>Game Elements</h4>
+                    <div class="mobile-element-legend">
+                        <div class="element-item">
+                            <span class="element-symbol">🐍</span>
+                            <span class="element-text">Snake (You)</span>
+                        </div>
+                        <div class="element-item">
+                            <span class="element-symbol">💰</span>
+                            <span class="element-text">Sats (Points + Health)</span>
+                        </div>
+                        <div class="element-item">
+                            <span class="element-symbol">💸</span>
+                            <span class="element-text">Fiat (Avoid - Health Loss)</span>
+                        </div>
+                        <div class="element-item">
+                            <span class="element-symbol">✅</span>
+                            <span class="element-text">Do's (Bonus Points)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Footer -->
         <footer class="game-footer">
-            <p>Learn Bitcoin best practices through gameplay! Stack sats, stay safe, and HODL! 🚀</p>
+            <p>🐍 SnakeSats - Learn Bitcoin investment best practices through gameplay!</p>
         </footer>
     </div>
 
