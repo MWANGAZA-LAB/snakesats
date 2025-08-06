@@ -1,0 +1,38 @@
+{
+  "name": "snakesats",
+  "version": "1.0.0",
+  "description": "A Bitcoin education game that teaches investment best practices through classic Snake gameplay",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "serve": "python -m http.server 8000",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "bitcoin",
+    "education",
+    "game",
+    "snake",
+    "crypto",
+    "investment",
+    "html5",
+    "canvas",
+    "javascript"
+  ],
+  "author": "SnakeSats Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MWANGAZA-LAB/snakesats.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MWANGAZA-LAB/snakesats/issues"
+  },
+  "homepage": "https://mwanga-lab.github.io/snakesats",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+} 
