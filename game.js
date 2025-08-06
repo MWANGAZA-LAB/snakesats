@@ -25,8 +25,10 @@ class SnakeSats {
         this.musicToggle = document.getElementById('music-toggle');
         
         // Difficulty selector
-        this.difficultySelector = document.getElementById('difficulty-selector');
         this.difficultyButtons = document.querySelectorAll('.difficulty-btn');
+        
+        // Collapsible sections
+        this.sectionToggles = document.querySelectorAll('.section-toggle');
         
         // Game state
         this.gameRunning = false;
@@ -133,9 +135,36 @@ class SnakeSats {
     init() {
         this.setupEventListeners();
         this.setupDifficultySelection();
+        this.setupCollapsibleSections();
         this.updateTip();
         this.updateStats();
         this.showMessage("Select difficulty and click 'Start Game' to begin!");
+    }
+    
+    setupCollapsibleSections() {
+        this.sectionToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const sectionId = toggle.dataset.section;
+                const content = document.getElementById(sectionId);
+                const arrow = toggle.querySelector('.toggle-arrow');
+                
+                // Toggle active state
+                toggle.classList.toggle('active');
+                content.classList.toggle('active');
+                
+                // Auto-expand game controls when game starts
+                if (sectionId === 'game-controls' && this.gameRunning) {
+                    toggle.classList.add('active');
+                    content.classList.add('active');
+                }
+            });
+        });
+        
+        // Auto-expand game controls by default
+        const gameControlsToggle = document.querySelector('[data-section="game-controls"]');
+        const gameControlsContent = document.getElementById('game-controls');
+        gameControlsToggle.classList.add('active');
+        gameControlsContent.classList.add('active');
     }
     
     initSoundSystem() {
@@ -350,7 +379,6 @@ class SnakeSats {
         
         // Update UI
         this.startBtn.classList.add('hidden');
-        this.difficultySelector.classList.add('hidden');
         this.pauseBtn.classList.remove('hidden');
         this.pauseBtn.textContent = 'Pause';
         this.restartBtn.classList.add('hidden');
@@ -454,11 +482,6 @@ class SnakeSats {
             }
         });
         
-        // Remove tail if no sat eaten
-        if (!satEaten) {
-            this.snake.pop();
-        }
-        
         // Generate new objects
         if (this.sats.length === 0) {
             this.generateSat();
@@ -475,6 +498,11 @@ class SnakeSats {
         // Level up based on health and score
         if (this.score > 0 && this.score % 50 === 0 && this.health >= 50) {
             this.levelUp();
+        }
+        
+        // Remove tail if no sat eaten
+        if (!satEaten) {
+            this.snake.pop();
         }
     }
     
@@ -670,7 +698,6 @@ class SnakeSats {
         this.showMessage(`Game Over! ${message} Final Score: ${this.score} sats`);
         this.pauseBtn.classList.add('hidden');
         this.restartBtn.classList.remove('hidden');
-        this.difficultySelector.classList.remove('hidden');
     }
     
     updateScore() {

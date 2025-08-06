@@ -58,41 +58,136 @@
 
         <!-- Main Game Section -->
         <div class="main-content">
-            <!-- Left Panel - Game Info -->
+            <!-- Left Panel - Game Controls -->
             <div class="left-panel">
-                <div class="info-panel">
-                    <h3>Bitcoin Tips:</h3>
-                    <div id="tip-display" class="tip-text">
-                        Stack sats regularly and practice self-custody!
+                <!-- Game Controls -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="game-controls">
+                        <span class="toggle-icon">🎮</span>
+                        Game Controls
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="game-controls">
+                        <div class="game-buttons">
+                            <button id="start-btn" class="btn-primary">Start Game</button>
+                            <button id="pause-btn" class="btn-secondary hidden">Pause</button>
+                            <button id="restart-btn" class="btn-secondary hidden">Play Again</button>
+                        </div>
+                        <div class="game-status">
+                            <div id="game-message" class="status-message"></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="instructions-panel">
-                    <h3>How to Play:</h3>
-                    <ul>
-                        <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
-                        <li>💵 <strong>Avoid Fiat</strong> - Dollar signs (bad investment habits)</li>
-                        <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
-                        <li>❤️ <strong>Health System</strong> - More sats = more health</li>
-                    </ul>
-                    
-                    <h3>Controls:</h3>
-                    <p><strong>Desktop:</strong> Arrow keys or WASD</p>
-                    <p><strong>Mobile:</strong> Swipe to change direction</p>
-                    <p><strong>Pause:</strong> Spacebar or P key</p>
+
+                <!-- How to Play -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="how-to-play">
+                        <span class="toggle-icon">❓</span>
+                        How to Play
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="how-to-play">
+                        <ul class="game-rules">
+                            <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
+                            <li>💵 <strong>Avoid Fiat</strong> - Dollar signs (bad investment habits)</li>
+                            <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
+                            <li>❤️ <strong>Health System</strong> - More sats = more health</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="sound-panel">
-                    <h3>Sound Settings:</h3>
-                    <div class="sound-controls">
-                        <label>
-                            <input type="checkbox" id="sound-toggle" checked>
-                            Sound Effects
-                        </label>
-                        <label>
-                            <input type="checkbox" id="music-toggle" checked>
-                            Background Music
-                        </label>
+                <!-- Controls -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="controls">
+                        <span class="toggle-icon">⌨️</span>
+                        Controls
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="controls">
+                        <div class="control-info">
+                            <p><strong>Desktop:</strong> Arrow keys or WASD</p>
+                            <p><strong>Mobile:</strong> Swipe to change direction</p>
+                            <p><strong>Pause:</strong> Spacebar or P key</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Level -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="game-level">
+                        <span class="toggle-icon">🎯</span>
+                        Select Level
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="game-level">
+                        <div class="difficulty-options">
+                            <button class="difficulty-btn" data-difficulty="beginner">
+                                <span class="difficulty-icon">🌱</span>
+                                <span class="difficulty-name">Beginner</span>
+                            </button>
+                            <button class="difficulty-btn" data-difficulty="normal">
+                                <span class="difficulty-icon">⚡</span>
+                                <span class="difficulty-name">Normal</span>
+                            </button>
+                            <button class="difficulty-btn" data-difficulty="legendary">
+                                <span class="difficulty-icon">🔥</span>
+                                <span class="difficulty-name">Legendary</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sound Settings -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="sound-settings">
+                        <span class="toggle-icon">🔊</span>
+                        Sound Settings
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="sound-settings">
+                        <div class="sound-controls">
+                            <label>
+                                <input type="checkbox" id="sound-toggle" checked>
+                                Sound Effects
+                            </label>
+                            <label>
+                                <input type="checkbox" id="music-toggle" checked>
+                                Background Music
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Elements -->
+                <div class="control-section">
+                    <button class="section-toggle" data-section="game-elements">
+                        <span class="toggle-icon">🎲</span>
+                        Game Elements
+                        <span class="toggle-arrow">▼</span>
+                    </button>
+                    <div class="section-content" id="game-elements">
+                        <div class="element-legend">
+                            <div class="element-item">
+                                <span class="element-symbol">🐍</span>
+                                <span class="element-text">Your Snake</span>
+                            </div>
+                            <div class="element-item">
+                                <span class="element-symbol">🟡</span>
+                                <span class="element-text">Sats (Collect)</span>
+                            </div>
+                            <div class="element-item">
+                                <span class="element-symbol">💵</span>
+                                <span class="element-text">Fiat (Avoid)</span>
+                            </div>
+                            <div class="element-item">
+                                <span class="element-symbol">✅</span>
+                                <span class="element-text">Do's (Pass Through)</span>
+                            </div>
+                            <div class="element-item">
+                                <span class="element-symbol">❤️</span>
+                                <span class="element-text">Health Points</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,35 +196,11 @@
             <div class="center-panel">
                 <canvas id="gameCanvas" width="600" height="400"></canvas>
                 
-                <!-- Game Status Display -->
-                <div class="game-status">
-                    <div id="game-message" class="status-message"></div>
-                    <div class="status-buttons">
-                        <button id="start-btn" class="btn-primary">Start Game</button>
-                        <button id="pause-btn" class="btn-secondary hidden">Pause</button>
-                        <button id="restart-btn" class="btn-secondary hidden">Play Again</button>
-                    </div>
-                </div>
-
-                <!-- Difficulty Selection -->
-                <div id="difficulty-selector" class="difficulty-panel">
-                    <h3>Select Difficulty:</h3>
-                    <div class="difficulty-options">
-                        <button class="difficulty-btn" data-difficulty="beginner">
-                            <span class="difficulty-icon">🌱</span>
-                            <span class="difficulty-name">Beginner</span>
-                            <span class="difficulty-desc">Slow speed, more health</span>
-                        </button>
-                        <button class="difficulty-btn" data-difficulty="normal">
-                            <span class="difficulty-icon">⚡</span>
-                            <span class="difficulty-name">Normal</span>
-                            <span class="difficulty-desc">Balanced gameplay</span>
-                        </button>
-                        <button class="difficulty-btn" data-difficulty="legendary">
-                            <span class="difficulty-icon">🔥</span>
-                            <span class="difficulty-name">Legendary</span>
-                            <span class="difficulty-desc">Fast speed, high risk</span>
-                        </button>
+                <!-- Bitcoin Tips -->
+                <div class="tips-panel">
+                    <h3>💡 Bitcoin Tip:</h3>
+                    <div id="tip-display" class="tip-text">
+                        Stack sats regularly and practice self-custody!
                     </div>
                 </div>
             </div>
@@ -137,7 +208,7 @@
             <!-- Right Panel - Game Stats -->
             <div class="right-panel">
                 <div class="stats-panel">
-                    <h3>Game Stats:</h3>
+                    <h3>📊 Game Stats</h3>
                     <div class="stat-item">
                         <span class="stat-label">Current Score:</span>
                         <span id="current-score" class="stat-value">0</span>
@@ -157,30 +228,6 @@
                     <div class="stat-item">
                         <span class="stat-label">Difficulty:</span>
                         <span id="current-difficulty" class="stat-value">-</span>
-                    </div>
-                </div>
-                
-                <div class="legend-panel">
-                    <h3>Game Elements:</h3>
-                    <div class="legend-item">
-                        <span class="legend-symbol">🐍</span>
-                        <span class="legend-text">Your Snake</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-symbol">🟡</span>
-                        <span class="legend-text">Sats (Collect)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-symbol">💵</span>
-                        <span class="legend-text">Fiat (Avoid)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-symbol">✅</span>
-                        <span class="legend-text">Do's (Pass Through)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-symbol">❤️</span>
-                        <span class="legend-text">Health Points</span>
                     </div>
                 </div>
             </div>
