@@ -46,6 +46,10 @@
                     <span id="level" class="value">1</span>
                 </div>
                 <div class="score-item">
+                    <span class="label">Health:</span>
+                    <span id="health" class="value">100</span>
+                </div>
+                <div class="score-item">
                     <span class="label">Best:</span>
                     <span id="best-score" class="value">0</span>
                 </div>
@@ -67,13 +71,29 @@
                     <h3>How to Play:</h3>
                     <ul>
                         <li>🟡 <strong>Eat Sats</strong> - Grow your snake and earn points</li>
-                        <li>❌ <strong>Avoid "Don'ts"</strong> - Red skulls (bad investment habits)</li>
+                        <li>💵 <strong>Avoid Fiat</strong> - Dollar signs (bad investment habits)</li>
                         <li>✅ <strong>Pass through "Do's"</strong> - Green paths (best practices)</li>
+                        <li>❤️ <strong>Health System</strong> - More sats = more health</li>
                     </ul>
                     
                     <h3>Controls:</h3>
                     <p><strong>Desktop:</strong> Arrow keys or WASD</p>
                     <p><strong>Mobile:</strong> Swipe to change direction</p>
+                    <p><strong>Pause:</strong> Spacebar or P key</p>
+                </div>
+
+                <div class="sound-panel">
+                    <h3>Sound Settings:</h3>
+                    <div class="sound-controls">
+                        <label>
+                            <input type="checkbox" id="sound-toggle" checked>
+                            Sound Effects
+                        </label>
+                        <label>
+                            <input type="checkbox" id="music-toggle" checked>
+                            Background Music
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -86,7 +106,30 @@
                     <div id="game-message" class="status-message"></div>
                     <div class="status-buttons">
                         <button id="start-btn" class="btn-primary">Start Game</button>
+                        <button id="pause-btn" class="btn-secondary hidden">Pause</button>
                         <button id="restart-btn" class="btn-secondary hidden">Play Again</button>
+                    </div>
+                </div>
+
+                <!-- Difficulty Selection -->
+                <div id="difficulty-selector" class="difficulty-panel">
+                    <h3>Select Difficulty:</h3>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn" data-difficulty="beginner">
+                            <span class="difficulty-icon">🌱</span>
+                            <span class="difficulty-name">Beginner</span>
+                            <span class="difficulty-desc">Slow speed, more health</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="normal">
+                            <span class="difficulty-icon">⚡</span>
+                            <span class="difficulty-name">Normal</span>
+                            <span class="difficulty-desc">Balanced gameplay</span>
+                        </button>
+                        <button class="difficulty-btn" data-difficulty="legendary">
+                            <span class="difficulty-icon">🔥</span>
+                            <span class="difficulty-name">Legendary</span>
+                            <span class="difficulty-desc">Fast speed, high risk</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,6 +154,10 @@
                         <span class="stat-label">Good Practices:</span>
                         <span id="good-practices" class="stat-value">0</span>
                     </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Difficulty:</span>
+                        <span id="current-difficulty" class="stat-value">-</span>
+                    </div>
                 </div>
                 
                 <div class="legend-panel">
@@ -124,12 +171,16 @@
                         <span class="legend-text">Sats (Collect)</span>
                     </div>
                     <div class="legend-item">
-                        <span class="legend-symbol">❌</span>
-                        <span class="legend-text">Don'ts (Avoid)</span>
+                        <span class="legend-symbol">💵</span>
+                        <span class="legend-text">Fiat (Avoid)</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-symbol">✅</span>
                         <span class="legend-text">Do's (Pass Through)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-symbol">❤️</span>
+                        <span class="legend-text">Health Points</span>
                     </div>
                 </div>
             </div>
