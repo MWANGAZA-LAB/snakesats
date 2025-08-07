@@ -7,6 +7,8 @@
 > **Learn Bitcoin investment best practices through engaging gameplay!** 🚀
 
 **🎮 [Play SnakeSats Now](https://mwangaza-lab.github.io/snakesats/)**
+<img width="1916" height="974" alt="image" src="https://github.com/user-attachments/assets/6a965497-65e8-4589-b0bb-c477cab13177" />
+
 
 ## 📖 About
 
