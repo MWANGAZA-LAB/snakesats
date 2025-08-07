@@ -22,7 +22,7 @@ class SnakeSats {
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
         // Speed progression system
-        this.currentSpeed = 400; // Initial speed (very slow - crawling snail)
+        this.currentSpeed = 800; // Initial speed (extremely slow - very slow snail)
         this.speedLevel = 1;
         this.maxSpeedLevel = 10;
         this.speedChangeInterval = 30000; // 30 seconds
@@ -50,14 +50,14 @@ class SnakeSats {
         this.difficulty = 'normal';
         this.difficultySettings = {
             normal: { 
-                initialSpeed: 400, // Much slower - like a crawling snail
-                speedIncrement: 15, 
+                initialSpeed: 800, // Extremely slow - like a very slow snail
+                speedIncrement: 20, 
                 healthGain: 8, 
                 fiatDamage: 25
             },
             legendary: { 
-                initialSpeed: 300, // Slower than normal but still challenging
-                speedIncrement: 20, 
+                initialSpeed: 600, // Much slower than normal but still challenging
+                speedIncrement: 25, 
                 healthGain: 5, 
                 fiatDamage: 30
             }
