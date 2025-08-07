@@ -22,7 +22,7 @@ class SnakeSats {
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
         // Speed progression system
-        this.currentSpeed = 250; // Initial speed (good for beginners)
+        this.currentSpeed = 300; // Initial speed (good for beginners)
         this.speedLevel = 1;
         this.maxSpeedLevel = 21; // 21 levels for 21 million Bitcoin
         this.speedChangeInterval = 20000; // 20 seconds
@@ -50,14 +50,14 @@ class SnakeSats {
         this.difficulty = 'normal';
         this.difficultySettings = {
             normal: { 
-                initialSpeed: 250, // Good starting speed
-                speedIncrement: 15, 
+                initialSpeed: 300, // Good starting speed
+                speedIncrement: 25, 
                 healthGain: 8, 
                 fiatDamage: 25
             },
             legendary: { 
-                initialSpeed: 180, // Faster than normal for challenge
-                speedIncrement: 20, 
+                initialSpeed: 200, // Faster than normal for challenge
+                speedIncrement: 30, 
                 healthGain: 5, 
                 fiatDamage: 30
             }
@@ -479,8 +479,8 @@ class SnakeSats {
         const currentTime = Date.now();
         
         // Speed increases based on sats collected (more responsive)
-        const satsForSpeedIncrease = 3; // Every 3 sats collected
-        const timeForSpeedIncrease = 15000; // Every 15 seconds as backup
+        const satsForSpeedIncrease = 2; // Every 2 sats collected for faster progression
+        const timeForSpeedIncrease = 10000; // Every 10 seconds as backup
         
         // Check if enough sats collected for speed increase
         if (this.satsCollected >= satsForSpeedIncrease * this.speedLevel && this.speedLevel < this.maxSpeedLevel && !this.countdownActive) {
@@ -526,7 +526,7 @@ class SnakeSats {
         // Calculate new speed with more responsive progression
         const newSpeed = Math.max(
             settings.initialSpeed - (this.speedLevel - 1) * settings.speedIncrement,
-            50 // Minimum speed (very fast)
+            30 // Minimum speed (very fast)
         );
         
         this.currentSpeed = newSpeed;
@@ -535,6 +535,9 @@ class SnakeSats {
         // Visual feedback
         this.showSpeedChangeMessage();
         this.updateSpeedDisplay();
+        
+        // Add visual speed effect
+        this.addSpeedEffect();
         
         // Log speed for debugging
         console.log(`Speed increased to: ${newSpeed}ms (Level ${this.speedLevel}) - Sats collected: ${this.satsCollected}`);
@@ -557,8 +560,25 @@ class SnakeSats {
     }
     
     showSpeedChangeMessage() {
-        this.showMessage(`Speed increased! Level ${this.speedLevel}/21 🚀`);
-        setTimeout(() => this.hideMessage(), 2000);
+        this.showMessage(`🚀 SPEED INCREASED! Level ${this.speedLevel}/21 - Game is getting faster! ⚡`);
+        setTimeout(() => this.hideMessage(), 3000);
+    }
+    
+    addSpeedEffect() {
+        // Add a visual flash effect when speed increases
+        const canvas = this.canvas;
+        const originalFillStyle = this.ctx.fillStyle;
+        
+        // Flash effect
+        this.ctx.fillStyle = '#f7931a';
+        this.ctx.globalAlpha = 0.3;
+        this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.ctx.globalAlpha = 1.0;
+        
+        // Reset after flash
+        setTimeout(() => {
+            this.ctx.fillStyle = originalFillStyle;
+        }, 200);
     }
     
     resetSpeedProgression() {
