@@ -22,10 +22,10 @@ class SnakeSats {
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
         // Speed progression system
-        this.currentSpeed = 800; // Initial speed (extremely slow - very slow snail)
+        this.currentSpeed = 300; // Initial speed (moderate - good for beginners)
         this.speedLevel = 1;
         this.maxSpeedLevel = 10;
-        this.speedChangeInterval = 30000; // 30 seconds
+        this.speedChangeInterval = 20000; // 20 seconds
         this.countdownTime = 5000; // 5 seconds countdown
         this.lastSpeedChange = 0;
         this.countdownActive = false;
@@ -50,14 +50,14 @@ class SnakeSats {
         this.difficulty = 'normal';
         this.difficultySettings = {
             normal: { 
-                initialSpeed: 800, // Extremely slow - like a very slow snail
-                speedIncrement: 20, 
+                initialSpeed: 300, // Moderate speed - good for beginners
+                speedIncrement: 25, 
                 healthGain: 8, 
                 fiatDamage: 25
             },
             legendary: { 
-                initialSpeed: 600, // Much slower than normal but still challenging
-                speedIncrement: 25, 
+                initialSpeed: 200, // Faster than normal for challenge
+                speedIncrement: 30, 
                 healthGain: 5, 
                 fiatDamage: 30
             }
@@ -478,8 +478,17 @@ class SnakeSats {
     updateSpeedProgression() {
         const currentTime = Date.now();
         
-        // Check if it's time for speed change
-        if (currentTime - this.lastSpeedChange >= this.speedChangeInterval && this.speedLevel < this.maxSpeedLevel) {
+        // Speed increases based on sats collected and time
+        const satsForSpeedIncrease = 5; // Every 5 sats collected
+        const timeForSpeedIncrease = 20000; // Every 20 seconds
+        
+        // Check if enough sats collected for speed increase
+        if (this.satsCollected >= satsForSpeedIncrease * this.speedLevel && this.speedLevel < this.maxSpeedLevel) {
+            this.startCountdown();
+        }
+        
+        // Also check time-based progression as backup
+        if (currentTime - this.lastSpeedChange >= timeForSpeedIncrease && this.speedLevel < this.maxSpeedLevel && !this.countdownActive) {
             this.startCountdown();
         }
         
@@ -513,10 +522,10 @@ class SnakeSats {
         this.speedLevel++;
         
         const settings = this.difficultySettings[this.difficulty];
-        // Calculate new speed with more gradual progression
+        // Calculate new speed with more responsive progression
         const newSpeed = Math.max(
             settings.initialSpeed - (this.speedLevel - 1) * settings.speedIncrement,
-            settings.initialSpeed - (this.maxSpeedLevel - 1) * settings.speedIncrement
+            50 // Minimum speed (very fast)
         );
         
         this.currentSpeed = newSpeed;
@@ -527,7 +536,7 @@ class SnakeSats {
         this.updateSpeedDisplay();
         
         // Log speed for debugging
-        console.log(`Speed increased to: ${newSpeed}ms (Level ${this.speedLevel})`);
+        console.log(`Speed increased to: ${newSpeed}ms (Level ${this.speedLevel}) - Sats collected: ${this.satsCollected}`);
     }
     
     updateCountdownDisplay() {
