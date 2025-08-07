@@ -116,8 +116,7 @@
                         <div class="difficulty-panel">
                             <h4>Select Difficulty:</h4>
                             <div class="difficulty-options">
-                                <button class="difficulty-btn active" data-difficulty="beginner">Beginner</button>
-                                <button class="difficulty-btn" data-difficulty="normal">Normal</button>
+                                <button class="difficulty-btn active" data-difficulty="normal">Normal</button>
                                 <button class="difficulty-btn" data-difficulty="legendary">Legendary</button>
                             </div>
                         </div>
@@ -214,7 +213,15 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Difficulty:</span>
-                            <span class="stat-value" id="currentDifficulty">Beginner</span>
+                            <span class="stat-value" id="currentDifficulty">Normal</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Speed Level:</span>
+                            <span class="stat-value" id="currentSpeed">1/10</span>
+                        </div>
+                        <div class="stat-row" id="speedCountdownRow" style="display: none;">
+                            <span class="stat-label">Speed Change:</span>
+                            <span class="stat-value" id="speedCountdown">Ready</span>
                         </div>
                     </div>
                 </div>
@@ -251,8 +258,7 @@
                 <div class="mobile-section">
                     <h4>Difficulty</h4>
                     <div class="mobile-difficulty-options">
-                        <button class="mobile-difficulty-btn active" data-difficulty="beginner">Beginner</button>
-                        <button class="mobile-difficulty-btn" data-difficulty="normal">Normal</button>
+                        <button class="mobile-difficulty-btn active" data-difficulty="normal">Normal</button>
                         <button class="mobile-difficulty-btn" data-difficulty="legendary">Legendary</button>
                     </div>
                 </div>

@@ -21,6 +21,24 @@ class SnakeSats {
         this.fiatHit = 0;
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
+        // Speed progression system
+        this.currentSpeed = 150; // Initial speed (very slow)
+        this.speedLevel = 1;
+        this.maxSpeedLevel = 10;
+        this.speedChangeInterval = 30000; // 30 seconds
+        this.countdownTime = 5000; // 5 seconds countdown
+        this.lastSpeedChange = 0;
+        this.countdownActive = false;
+        this.countdownValue = 5;
+        
+        // Object generation timers
+        this.lastSatSpawn = 0;
+        this.lastFiatSpawn = 0;
+        this.lastDoSpawn = 0;
+        this.satSpawnInterval = 3000; // 3 seconds
+        this.fiatSpawnInterval = 4000; // 4 seconds
+        this.doSpawnInterval = 8000; // 8 seconds
+        
         // Game objects
         this.snake = [{x: 10, y: 10}];
         this.direction = {x: 0, y: 0};
@@ -28,12 +46,21 @@ class SnakeSats {
         this.fiats = [];
         this.dos = [];
         
-        // Game settings
-        this.difficulty = 'beginner';
+        // Game settings - Updated for Normal and Legendary only
+        this.difficulty = 'normal';
         this.difficultySettings = {
-            beginner: { speed: 150, healthGain: 10, fiatDamage: 20, fiatSpawnRate: 0.3 },
-            normal: { speed: 120, healthGain: 8, fiatDamage: 25, fiatSpawnRate: 0.4 },
-            legendary: { speed: 90, healthGain: 5, fiatDamage: 30, fiatSpawnRate: 0.5 }
+            normal: { 
+                initialSpeed: 150, 
+                speedIncrement: 10, 
+                healthGain: 8, 
+                fiatDamage: 25
+            },
+            legendary: { 
+                initialSpeed: 120, 
+                speedIncrement: 15, 
+                healthGain: 5, 
+                fiatDamage: 30
+            }
         };
         
         // Sound system
@@ -340,6 +367,7 @@ class SnakeSats {
     setDifficulty(difficulty) {
         this.difficulty = difficulty;
         this.updateStats();
+        this.resetSpeedProgression(); // Reset speed progression when difficulty changes
     }
     
     setupCollapsibleSections() {
@@ -388,6 +416,17 @@ class SnakeSats {
         this.goodPractices = 0;
         this.fiatHit = 0;
         
+        // Initialize speed progression
+        this.resetSpeedProgression();
+        
+        // Reset object generation timers
+        this.lastSatSpawn = 0;
+        this.lastFiatSpawn = 0;
+        this.lastDoSpawn = 0;
+        this.satSpawnInterval = 3000;
+        this.fiatSpawnInterval = 4000;
+        this.doSpawnInterval = 8000;
+        
         this.updateButtonStates();
         this.hideMessage();
         this.gameLoop();
@@ -431,9 +470,99 @@ class SnakeSats {
         
         this.update();
         this.draw();
+        this.updateSpeedProgression();
         
-        const speed = this.difficultySettings[this.difficulty].speed;
-        setTimeout(() => this.gameLoop(), speed);
+        setTimeout(() => this.gameLoop(), this.currentSpeed);
+    }
+    
+    updateSpeedProgression() {
+        const currentTime = Date.now();
+        
+        // Check if it's time for speed change
+        if (currentTime - this.lastSpeedChange >= this.speedChangeInterval && this.speedLevel < this.maxSpeedLevel) {
+            this.startCountdown();
+        }
+        
+        // Update countdown
+        if (this.countdownActive) {
+            const timeSinceCountdownStart = currentTime - this.lastSpeedChange;
+            const newCountdownValue = Math.ceil((this.countdownTime - timeSinceCountdownStart) / 1000);
+            
+            if (newCountdownValue !== this.countdownValue) {
+                this.countdownValue = newCountdownValue;
+                this.updateCountdownDisplay();
+            }
+            
+            // Check if countdown is complete
+            if (timeSinceCountdownStart >= this.countdownTime) {
+                this.increaseSpeed();
+            }
+        }
+    }
+    
+    startCountdown() {
+        this.countdownActive = true;
+        this.countdownValue = 5;
+        this.lastSpeedChange = Date.now();
+        this.updateCountdownDisplay();
+        this.playSound('levelUp');
+    }
+    
+    increaseSpeed() {
+        this.countdownActive = false;
+        this.speedLevel++;
+        
+        const settings = this.difficultySettings[this.difficulty];
+        const newSpeed = Math.max(
+            settings.initialSpeed - (this.speedLevel - 1) * settings.speedIncrement,
+            settings.initialSpeed - (this.maxSpeedLevel - 1) * settings.speedIncrement
+        );
+        
+        this.currentSpeed = newSpeed;
+        this.lastSpeedChange = Date.now();
+        
+        // Visual feedback
+        this.showSpeedChangeMessage();
+        this.updateSpeedDisplay();
+    }
+    
+    updateCountdownDisplay() {
+        const countdownElement = document.getElementById('speedCountdown');
+        const countdownRow = document.getElementById('speedCountdownRow');
+        if (countdownElement && countdownRow) {
+            countdownElement.textContent = `${this.countdownValue}s`;
+            countdownRow.style.display = 'block';
+        }
+    }
+    
+    updateSpeedDisplay() {
+        const speedElement = document.getElementById('currentSpeed');
+        if (speedElement) {
+            speedElement.textContent = `Speed Level: ${this.speedLevel}/10`;
+        }
+    }
+    
+    showSpeedChangeMessage() {
+        this.showMessage(`Speed increased! Level ${this.speedLevel}/10 🚀`);
+        setTimeout(() => this.hideMessage(), 2000);
+    }
+    
+    resetSpeedProgression() {
+        this.currentSpeed = this.difficultySettings[this.difficulty].initialSpeed;
+        this.speedLevel = 1;
+        this.countdownActive = false;
+        this.countdownValue = 5;
+        this.lastSpeedChange = 0;
+        
+        // Hide countdown display
+        const countdownElement = document.getElementById('speedCountdown');
+        const countdownRow = document.getElementById('speedCountdownRow');
+        if (countdownElement && countdownRow) {
+            countdownElement.textContent = 'Ready';
+            countdownRow.style.display = 'none';
+        }
+        
+        this.updateSpeedDisplay();
     }
     
     update() {
@@ -493,10 +622,29 @@ class SnakeSats {
             this.snake.pop();
         }
         
-        // Generate objects
-        if (Math.random() < 0.02) this.generateSat();
-        if (Math.random() < this.difficultySettings[this.difficulty].fiatSpawnRate * 0.01) this.generateFiat();
-        if (Math.random() < 0.01) this.generateDo();
+        // Generate objects with random intervals
+        const currentTime = Date.now();
+        
+        // Generate sats at random intervals (2-6 seconds)
+        if (currentTime - this.lastSatSpawn > this.satSpawnInterval && this.sats.length < 3) {
+            this.generateSat();
+            this.lastSatSpawn = currentTime;
+            this.satSpawnInterval = 2000 + Math.random() * 4000; // 2-6 seconds
+        }
+        
+        // Generate fiats at random intervals (3-8 seconds)
+        if (currentTime - this.lastFiatSpawn > this.fiatSpawnInterval && this.fiats.length < 2) {
+            this.generateFiat();
+            this.lastFiatSpawn = currentTime;
+            this.fiatSpawnInterval = 3000 + Math.random() * 5000; // 3-8 seconds
+        }
+        
+        // Generate do's at random intervals (5-12 seconds)
+        if (currentTime - this.lastDoSpawn > this.doSpawnInterval && this.dos.length < 1) {
+            this.generateDo();
+            this.lastDoSpawn = currentTime;
+            this.doSpawnInterval = 5000 + Math.random() * 7000; // 5-12 seconds
+        }
         
         // Check level up
         if (this.score >= this.level * 100 && this.health >= 50) {
