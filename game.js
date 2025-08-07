@@ -22,9 +22,9 @@ class SnakeSats {
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
         // Speed progression system
-        this.currentSpeed = 300; // Initial speed (moderate - good for beginners)
+        this.currentSpeed = 250; // Initial speed (good for beginners)
         this.speedLevel = 1;
-        this.maxSpeedLevel = 10;
+        this.maxSpeedLevel = 21; // 21 levels for 21 million Bitcoin
         this.speedChangeInterval = 20000; // 20 seconds
         this.countdownTime = 5000; // 5 seconds countdown
         this.lastSpeedChange = 0;
@@ -50,14 +50,14 @@ class SnakeSats {
         this.difficulty = 'normal';
         this.difficultySettings = {
             normal: { 
-                initialSpeed: 300, // Moderate speed - good for beginners
-                speedIncrement: 25, 
+                initialSpeed: 250, // Good starting speed
+                speedIncrement: 15, 
                 healthGain: 8, 
                 fiatDamage: 25
             },
             legendary: { 
-                initialSpeed: 200, // Faster than normal for challenge
-                speedIncrement: 30, 
+                initialSpeed: 180, // Faster than normal for challenge
+                speedIncrement: 20, 
                 healthGain: 5, 
                 fiatDamage: 30
             }
@@ -478,12 +478,13 @@ class SnakeSats {
     updateSpeedProgression() {
         const currentTime = Date.now();
         
-        // Speed increases based on sats collected and time
-        const satsForSpeedIncrease = 5; // Every 5 sats collected
-        const timeForSpeedIncrease = 20000; // Every 20 seconds
+        // Speed increases based on sats collected (more responsive)
+        const satsForSpeedIncrease = 3; // Every 3 sats collected
+        const timeForSpeedIncrease = 15000; // Every 15 seconds as backup
         
         // Check if enough sats collected for speed increase
-        if (this.satsCollected >= satsForSpeedIncrease * this.speedLevel && this.speedLevel < this.maxSpeedLevel) {
+        if (this.satsCollected >= satsForSpeedIncrease * this.speedLevel && this.speedLevel < this.maxSpeedLevel && !this.countdownActive) {
+            console.log(`Speed increase triggered! Sats: ${this.satsCollected}, Required: ${satsForSpeedIncrease * this.speedLevel}, Level: ${this.speedLevel}`);
             this.startCountdown();
         }
         
@@ -551,12 +552,12 @@ class SnakeSats {
     updateSpeedDisplay() {
         const speedElement = document.getElementById('currentSpeed');
         if (speedElement) {
-            speedElement.textContent = `Speed Level: ${this.speedLevel}/10`;
+            speedElement.textContent = `Speed Level: ${this.speedLevel}/21`;
         }
     }
     
     showSpeedChangeMessage() {
-        this.showMessage(`Speed increased! Level ${this.speedLevel}/10 🚀`);
+        this.showMessage(`Speed increased! Level ${this.speedLevel}/21 🚀`);
         setTimeout(() => this.hideMessage(), 2000);
     }
     
@@ -608,6 +609,9 @@ class SnakeSats {
             this.health = Math.min(this.maxHealth, this.health + this.difficultySettings[this.difficulty].healthGain);
             this.playSound('collect');
             this.generateSat();
+            
+            // Debug: Log sat collection for speed progression
+            console.log(`Sat collected! Total: ${this.satsCollected}, Speed Level: ${this.speedLevel}, Current Speed: ${this.currentSpeed}ms`);
         }
         
         // Check fiat collision
