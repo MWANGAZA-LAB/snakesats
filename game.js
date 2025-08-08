@@ -40,7 +40,7 @@ class SnakeSats {
         this.doSpawnInterval = 8000; // 8 seconds
         
         // Game objects
-        this.snake = [{x: 10, y: 10}];
+        this.snake = [];
         this.direction = {x: 0, y: 0};
         this.sats = [];
         this.fiats = [];
@@ -84,17 +84,33 @@ class SnakeSats {
     
     setupCanvas() {
         if (this.isMobile) {
-            // Mobile canvas setup
+            // Mobile canvas setup - improved responsive sizing
             const maxSize = Math.min(window.innerWidth - 40, window.innerHeight - 200);
             this.canvas.width = maxSize;
             this.canvas.height = maxSize;
             this.gridSize = Math.floor(maxSize / 20);
         } else {
-            // Desktop canvas setup
-            this.canvas.width = 400;
-            this.canvas.height = 400;
-            this.gridSize = 20;
+            // Desktop canvas setup - increased from 400x400 to 600x600
+            this.canvas.width = 600;
+            this.canvas.height = 600;
+            this.gridSize = 30; // Increased from 20 to maintain proportional grid density
         }
+        
+        // Initialize snake position based on new grid size
+        this.initializeSnakePosition();
+        
+        // Log canvas setup for debugging
+        console.log(`Canvas setup - Size: ${this.canvas.width}x${this.canvas.height}, Grid: ${this.gridSize}, Mobile: ${this.isMobile}`);
+    }
+    
+    initializeSnakePosition() {
+        // Calculate center position based on grid size
+        const centerX = Math.floor(this.gridSize / 2);
+        const centerY = Math.floor(this.gridSize / 2);
+        this.snake = [{x: centerX, y: centerY}];
+        this.direction = {x: 0, y: 0};
+        
+        console.log(`Snake initialized at position: (${centerX}, ${centerY}) on ${this.gridSize}x${this.gridSize} grid`);
     }
     
     init() {
@@ -401,7 +417,10 @@ class SnakeSats {
         this.gameRunning = true;
         this.gamePaused = false;
         this.direction = {x: 1, y: 0};
-        this.snake = [{x: 10, y: 10}];
+        
+        // Use the new snake initialization method
+        this.initializeSnakePosition();
+        
         this.sats = [];
         this.fiats = [];
         this.dos = [];
@@ -961,5 +980,12 @@ class SnakeSats {
 
 // Initialize game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new SnakeSats();
+    const game = new SnakeSats();
+    // Expose game instance globally for testing
+    window.gameInstance = game;
+    
+    // Load test script for canvas size validation
+    const testScript = document.createElement('script');
+    testScript.src = 'test_canvas_size.js';
+    document.head.appendChild(testScript);
 }); 
