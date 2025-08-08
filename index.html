@@ -323,8 +323,12 @@
         </footer>
     </div>
 
-    <script src="game.js"></script>
+    <!-- Load diagnostic scripts first -->
     <script src="diagnostic_test.js"></script>
     <script src="quick_verification.js"></script>
+    <script src="manual_game_test.js"></script>
+    
+    <!-- Load main game script last -->
+    <script src="game.js"></script>
 </body>
-</html> 
+</html>

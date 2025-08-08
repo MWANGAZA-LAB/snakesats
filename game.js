@@ -109,32 +109,34 @@ class SnakeSats {
             const maxSize = Math.min(window.innerWidth - 40, window.innerHeight - 200);
             this.canvas.width = maxSize;
             this.canvas.height = maxSize;
-            this.gridSize = Math.floor(maxSize / 20);
+            this.gridSize = Math.floor(maxSize / 25); // Unified grid system
         } else {
-            // Desktop canvas setup - increased from 400x400 to 600x600
+            // Desktop canvas setup - Single unified grid
             this.canvas.width = 600;
             this.canvas.height = 600;
-            this.gridSize = 30; // Increased from 20 to maintain proportional grid density
+            this.gridSize = 24; // Creates a perfect 25x25 unified grid (600/24 = 25)
         }
         
-        // Initialize snake position based on new grid size
-        this.initializeSnakePosition();
+        // Calculate grid dimensions for unified system
+        this.gridWidth = Math.floor(this.canvas.width / this.gridSize);
+        this.gridHeight = Math.floor(this.canvas.height / this.gridSize);
         
         // Log canvas setup for debugging
-        console.log(`Canvas setup - Size: ${this.canvas.width}x${this.canvas.height}, Grid: ${this.gridSize}, Mobile: ${this.isMobile}`);
+        console.log(`Canvas setup - Size: ${this.canvas.width}x${this.canvas.height}, Grid: ${this.gridSize}px, Dimensions: ${this.gridWidth}x${this.gridHeight}, Mobile: ${this.isMobile}`);
     }
     
     initializeSnakePosition() {
-        // Calculate center position based on grid size
-        const centerX = Math.floor(this.gridSize / 2);
-        const centerY = Math.floor(this.gridSize / 2);
-        this.snake = [{x: centerX, y: centerY}];
-        this.direction = {x: 0, y: 0};
+        // Initialize snake at center of unified grid
+        const centerX = Math.floor(this.gridWidth / 2);
+        const centerY = Math.floor(this.gridHeight / 2);
         
-        console.log(`Snake initialized at position: (${centerX}, ${centerY}) on ${this.gridSize}x${this.gridSize} grid`);
+        this.snake = [{x: centerX, y: centerY}];
+        
+        console.log(`Snake initialized at position: (${centerX}, ${centerY}) on ${this.gridWidth}x${this.gridHeight} unified grid`);
     }
     
     init() {
+        this.initializeSnakePosition(); // Initialize snake position once
         this.initSoundSystem();
         this.setupEventListeners();
         this.setupCollapsibleSections();
@@ -504,9 +506,11 @@ class SnakeSats {
     startGame() {
         if (this.gameRunning) return;
         
+        console.log('🎮 Starting SnakeSats game...');
+        
         this.gameRunning = true;
         this.gamePaused = false;
-        this.direction = {x: 1, y: 0};
+        this.direction = {x: 0, y: 0}; // Start with no movement until user input
         
         // Use the new snake initialization method
         this.initializeSnakePosition();
@@ -530,15 +534,23 @@ class SnakeSats {
         this.currentTipIndex = 0;
         
         // Reset object generation timers
-        this.lastSatSpawn = 0;
-        this.lastFiatSpawn = 0;
-        this.lastDoSpawn = 0;
+        this.lastSatSpawn = Date.now();
+        this.lastFiatSpawn = Date.now();
+        this.lastDoSpawn = Date.now();
         this.satSpawnInterval = 3000;
         this.fiatSpawnInterval = 4000;
         this.doSpawnInterval = 8000;
         
+        // Generate initial objects
+        this.generateSat();
+        
         this.updateButtonStates();
         this.hideMessage();
+        this.showMessage('Use arrow keys or WASD to move! Collect sats 💰');
+        
+        console.log('✅ Game started successfully!');
+        console.log(`Snake at: (${this.snake[0].x}, ${this.snake[0].y}), Health: ${this.health}`);
+        
         this.gameLoop();
     }
     
@@ -711,14 +723,16 @@ class SnakeSats {
     }
     
     update() {
+        // Don't move if no direction is set (waiting for user input)
+        if (this.direction.x === 0 && this.direction.y === 0) {
+            return;
+        }
+        
         // Move snake
         const head = {x: this.snake[0].x + this.direction.x, y: this.snake[0].y + this.direction.y};
         
-        // Check wall collision
-        const gridWidth = this.canvas.width / this.gridSize;
-        const gridHeight = this.canvas.height / this.gridSize;
-        
-        if (head.x < 0 || head.x >= gridWidth || head.y < 0 || head.y >= gridHeight) {
+        // Check wall collision using unified grid system
+        if (head.x < 0 || head.x >= this.gridWidth || head.y < 0 || head.y >= this.gridHeight) {
             this.gameOver();
             return;
         }
@@ -814,21 +828,23 @@ class SnakeSats {
         this.ctx.fillStyle = '#0a0e14';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Draw grid (subtle)
+        // Draw unified grid system (subtle but consistent)
         this.ctx.strokeStyle = '#1a2332';
         this.ctx.lineWidth = 0.5;
         
-        for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
+        // Draw vertical grid lines
+        for (let x = 0; x <= this.gridWidth; x++) {
             this.ctx.beginPath();
-            this.ctx.moveTo(x, 0);
-            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.moveTo(x * this.gridSize, 0);
+            this.ctx.lineTo(x * this.gridSize, this.canvas.height);
             this.ctx.stroke();
         }
         
-        for (let y = 0; y <= this.canvas.height; y += this.gridSize) {
+        // Draw horizontal grid lines
+        for (let y = 0; y <= this.gridHeight; y++) {
             this.ctx.beginPath();
-            this.ctx.moveTo(0, y);
-            this.ctx.lineTo(this.canvas.width, y);
+            this.ctx.moveTo(0, y * this.gridSize);
+            this.ctx.lineTo(this.canvas.width, y * this.gridSize);
             this.ctx.stroke();
         }
         
@@ -944,12 +960,10 @@ class SnakeSats {
     }
     
     getRandomPosition() {
-        const gridWidth = this.canvas.width / this.gridSize;
-        const gridHeight = this.canvas.height / this.gridSize;
-        
+        // Use unified grid system for object positioning
         for (let attempts = 0; attempts < 50; attempts++) {
-            const x = Math.floor(Math.random() * gridWidth);
-            const y = Math.floor(Math.random() * gridHeight);
+            const x = Math.floor(Math.random() * this.gridWidth);
+            const y = Math.floor(Math.random() * this.gridHeight);
             
             if (!this.isPositionOccupied(x, y)) {
                 return {x, y};
@@ -1056,16 +1070,26 @@ class SnakeSats {
 
 // Initialize game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const game = new SnakeSats();
-    // Expose game instance globally for testing
-    window.gameInstance = game;
+    console.log('🎮 Initializing SnakeSats game...');
     
-    // Load test scripts for validation
-    const testScript = document.createElement('script');
-    testScript.src = 'test_canvas_size.js';
-    document.head.appendChild(testScript);
-    
-    const tipsTestScript = document.createElement('script');
-    tipsTestScript.src = 'test_bitcoin_tips.js';
-    document.head.appendChild(tipsTestScript);
-}); 
+    try {
+        const game = new SnakeSats();
+        
+        // Expose game instance globally for testing
+        window.gameInstance = game;
+        
+        console.log('✅ Game instance created and exposed globally');
+        console.log('🎯 Game ready to start - click Start Game button');
+        
+        // Run verification after game is fully initialized
+        setTimeout(() => {
+            if (typeof quickVerification === 'function') {
+                console.log('🔍 Running post-initialization verification...');
+                quickVerification();
+            }
+        }, 200);
+        
+    } catch (error) {
+        console.error('❌ Failed to initialize game:', error);
+    }
+});
