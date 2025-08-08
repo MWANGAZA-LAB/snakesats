@@ -227,15 +227,11 @@ class SnakeSats {
         // Difficulty selection
         this.setupDifficultySelection();
         
-        // Mobile drawer controls
-        const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
+        // Mobile info drawer controls
         const mobileInfoBtn = document.getElementById('mobileInfoBtn');
-        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const closeInfoBtn = document.getElementById('closeInfoBtn');
         
-        if (mobileSettingsBtn) mobileSettingsBtn.addEventListener('click', () => this.toggleMobileDrawer('settings'));
         if (mobileInfoBtn) mobileInfoBtn.addEventListener('click', () => this.toggleMobileDrawer('info'));
-        if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => this.closeMobileDrawer('settings'));
         if (closeInfoBtn) closeInfoBtn.addEventListener('click', () => this.closeMobileDrawer('info'));
     }
     
@@ -928,16 +924,10 @@ class SnakeSats {
             if (el) el.textContent = value;
         });
         
-        // Update health bar
-        const healthFill = document.getElementById('mobileHealthFill');
-        const healthText = document.getElementById('mobileHealthText');
-        
-        if (healthFill) {
-            healthFill.style.width = `${this.health}%`;
-        }
-        
-        if (healthText) {
-            healthText.textContent = this.health;
+        // Update mobile Bitcoin tips
+        const mobileTipContent = document.getElementById('mobileTipContent');
+        if (mobileTipContent) {
+            mobileTipContent.innerHTML = `<p>${this.getRandomMessage()}</p>`;
         }
     }
     

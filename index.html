@@ -26,28 +26,6 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- Mobile Header -->
-        <header class="mobile-header">
-            <div class="mobile-stats">
-                <div class="stat-item">
-                    <span class="stat-label">Sats</span>
-                    <span class="stat-value" id="mobile-score">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Level</span>
-                    <span class="stat-value" id="mobile-level">1</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Health</span>
-                    <span class="stat-value" id="mobile-health">100</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Best</span>
-                    <span class="stat-value" id="mobile-best">0</span>
-                </div>
-            </div>
-        </header>
-
         <!-- Desktop Header -->
         <header class="desktop-header">
             <h1>🐍 SnakeSats</h1>
@@ -57,7 +35,7 @@
         <!-- Main Content -->
         <div class="main-content">
             <!-- Left Panel - Desktop Only -->
-            <div class="left-panel">
+            <div class="left-panel desktop-only">
                 <div class="control-section active">
                     <button class="section-toggle">
                         <span class="toggle-icon">🎮</span>
@@ -174,24 +152,61 @@
 
             <!-- Center Panel - Game Canvas -->
             <div class="center-panel">
+                <!-- Mobile Stats Header -->
+                <div class="mobile-stats-header mobile-only">
+                    <div class="mobile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Sats</span>
+                            <span class="stat-value" id="mobile-score">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Level</span>
+                            <span class="stat-value" id="mobile-level">1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Health</span>
+                            <span class="stat-value" id="mobile-health">100</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Best</span>
+                            <span class="stat-value" id="mobile-best">0</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="game-area">
                     <canvas id="gameCanvas" width="400" height="400"></canvas>
                     <div class="game-message" id="gameMessage"></div>
                 </div>
                 
-                <!-- Mobile Game Stats -->
-                <div class="mobile-game-stats">
-                    <div class="health-bar-container">
-                        <div class="health-bar" id="mobileHealthBar">
-                            <div class="health-fill" id="mobileHealthFill"></div>
-                        </div>
-                        <span class="health-text">Health: <span id="mobileHealthText">100</span>%</span>
+                <!-- Mobile Game Controls -->
+                <div class="mobile-game-controls mobile-only">
+                    <div class="mobile-controls">
+                        <button id="mobileStartBtn" class="mobile-btn primary">Start</button>
+                        <button id="mobilePauseBtn" class="mobile-btn secondary" disabled>Pause</button>
+                        <button id="mobileRestartBtn" class="mobile-btn secondary" disabled>Restart</button>
                     </div>
+                </div>
+
+                <!-- Mobile Bitcoin Tips -->
+                <div class="mobile-bitcoin-tips mobile-only">
+                    <h3>💡 Bitcoin Tips</h3>
+                    <div class="tip-content" id="mobileTipContent">
+                        <p>⚡ Lightning Network enables fast, cheap transactions</p>
+                    </div>
+                </div>
+
+                <!-- Mobile Info Button -->
+                <div class="mobile-info-section mobile-only">
+                    <button id="mobileInfoBtn" class="mobile-info-btn">
+                        <span class="info-icon">ℹ️</span>
+                        Game Info
+                    </button>
                 </div>
             </div>
 
             <!-- Right Panel - Desktop Only -->
-            <div class="right-panel">
+            <div class="right-panel desktop-only">
                 <div class="info-panel">
                     <h3>Game Stats</h3>
                     <div class="stats-panel">
@@ -235,56 +250,23 @@
             </div>
         </div>
 
-        <!-- Mobile Bottom Control Bar -->
-        <div class="mobile-control-bar">
-            <div class="mobile-controls">
-                <button id="mobileStartBtn" class="mobile-btn primary">Start</button>
-                <button id="mobilePauseBtn" class="mobile-btn secondary" disabled>Pause</button>
-                <button id="mobileRestartBtn" class="mobile-btn secondary" disabled>Restart</button>
-            </div>
-            <div class="mobile-settings">
-                <button id="mobileSettingsBtn" class="mobile-btn icon-btn">⚙️</button>
-                <button id="mobileInfoBtn" class="mobile-btn icon-btn">ℹ️</button>
-            </div>
-        </div>
-
-        <!-- Mobile Settings Drawer -->
-        <div class="mobile-drawer" id="mobileSettingsDrawer">
-            <div class="drawer-header">
-                <h3>Settings</h3>
-                <button class="drawer-close" id="closeSettingsBtn">✕</button>
-            </div>
-            <div class="drawer-content">
-                <div class="mobile-section">
-                    <h4>Difficulty</h4>
-                    <div class="mobile-difficulty-options">
-                        <button class="mobile-difficulty-btn active" data-difficulty="normal">Normal</button>
-                        <button class="mobile-difficulty-btn" data-difficulty="legendary">Legendary</button>
-                    </div>
-                </div>
-                <div class="mobile-section">
-                    <h4>Sound</h4>
-                    <div class="mobile-sound-controls">
-                        <button id="mobileSoundToggle" class="mobile-sound-btn active">
-                            <span class="sound-icon">🔊</span> Sound
-                        </button>
-                        <button id="mobileMusicToggle" class="mobile-sound-btn active">
-                            <span class="music-icon">🎵</span> Music
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Mobile Info Drawer -->
         <div class="mobile-drawer" id="mobileInfoDrawer">
             <div class="drawer-header">
-                <h3>How to Play</h3>
+                <h3>Game Information</h3>
                 <button class="drawer-close" id="closeInfoBtn">✕</button>
             </div>
             <div class="drawer-content">
                 <div class="mobile-section">
-                    <h4>Game Rules</h4>
+                    <h4>🎮 Game Controls</h4>
+                    <div class="mobile-control-info">
+                        <p><strong>Swipe:</strong> Move snake in any direction</p>
+                        <p><strong>Tap:</strong> Pause/Resume game</p>
+                        <p><strong>Double Tap:</strong> Restart game</p>
+                    </div>
+                </div>
+                <div class="mobile-section">
+                    <h4>📖 How to Play</h4>
                     <div class="mobile-game-rules">
                         <p><strong>🐍 Snake:</strong> Control the snake to collect sats and grow!</p>
                         <p><strong>💰 Sats:</strong> Collect these to earn points and health</p>
@@ -294,15 +276,25 @@
                     </div>
                 </div>
                 <div class="mobile-section">
-                    <h4>Controls</h4>
-                    <div class="mobile-control-info">
-                        <p><strong>Swipe:</strong> Move snake in any direction</p>
-                        <p><strong>Tap:</strong> Pause/Resume game</p>
-                        <p><strong>Double Tap:</strong> Restart game</p>
+                    <h4>⚡ Difficulty Settings</h4>
+                    <div class="mobile-difficulty-options">
+                        <button class="mobile-difficulty-btn active" data-difficulty="normal">Normal</button>
+                        <button class="mobile-difficulty-btn" data-difficulty="legendary">Legendary</button>
                     </div>
                 </div>
                 <div class="mobile-section">
-                    <h4>Game Elements</h4>
+                    <h4>🔊 Sound Settings</h4>
+                    <div class="mobile-sound-controls">
+                        <button id="mobileSoundToggle" class="mobile-sound-btn active">
+                            <span class="sound-icon">🔊</span> Sound
+                        </button>
+                        <button id="mobileMusicToggle" class="mobile-sound-btn active">
+                            <span class="music-icon">🎵</span> Music
+                        </button>
+                    </div>
+                </div>
+                <div class="mobile-section">
+                    <h4>🎯 Game Elements</h4>
                     <div class="mobile-element-legend">
                         <div class="element-item">
                             <span class="element-symbol">🐍</span>
