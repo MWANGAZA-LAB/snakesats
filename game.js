@@ -74,6 +74,27 @@ class SnakeSats {
         this.touchStartY = 0;
         this.lastTapTime = 0;
         
+        // Bitcoin tips system
+        this.tipsEnabled = true;
+        this.lastTipUpdate = 0;
+        this.tipUpdateInterval = 8000; // 8 seconds between tip changes
+        this.tipDelay = 3000; // 3 seconds delay before first tip
+        this.currentTipIndex = 0;
+        this.tips = [
+            "💡 Stack sats regularly - consistency beats timing!",
+            "🔒 Self-custody is key - not your keys, not your coins!",
+            "📈 DCA (Dollar Cost Average) reduces emotional trading",
+            "❄️ Cold storage keeps your Bitcoin safe from hackers",
+            "🚫 Avoid FOMO - stick to your investment plan",
+            "💰 Bitcoin is scarce - only 21 million will ever exist",
+            "⚡ Lightning Network enables fast, cheap transactions",
+            "🌍 Bitcoin is global money for the internet age",
+            "🎯 Long-term thinking beats short-term speculation",
+            "🔐 Hardware wallets provide maximum security",
+            "📊 Market cycles are normal - stay the course",
+            "🌱 Bitcoin is the future of money"
+        ];
+        
         this.init();
     }
     
@@ -118,9 +139,27 @@ class SnakeSats {
         this.setupEventListeners();
         this.setupCollapsibleSections();
         this.setupMobileControls();
+        this.setupInitialBitcoinTips(); // Set up initial tips
         this.updateStats();
         this.updateMobileStats();
         this.showMessage('Press Start to begin your Bitcoin journey! 🚀');
+    }
+    
+    setupInitialBitcoinTips() {
+        // Set initial welcome message for tips
+        const welcomeTip = "🎮 Welcome to SnakeSats! Learn Bitcoin while you play!";
+        
+        // Set desktop tip
+        const tipContent = document.getElementById('tipContent');
+        if (tipContent) {
+            tipContent.innerHTML = `<p>${welcomeTip}</p>`;
+        }
+        
+        // Set mobile tip
+        const mobileTipContent = document.getElementById('mobileTipContent');
+        if (mobileTipContent) {
+            mobileTipContent.innerHTML = `<p>${welcomeTip}</p>`;
+        }
     }
     
     initSoundSystem() {
@@ -411,6 +450,57 @@ class SnakeSats {
         }
     }
     
+    updateBitcoinTips() {
+        if (!this.tipsEnabled) return;
+        
+        const currentTime = Date.now();
+        const gameStartTime = this.gameStartTime || currentTime;
+        
+        // Check if enough time has passed since game start for first tip
+        if (currentTime - gameStartTime < this.tipDelay) {
+            return;
+        }
+        
+        // Check if it's time to update the tip
+        if (currentTime - this.lastTipUpdate >= this.tipUpdateInterval) {
+            this.rotateBitcoinTip();
+            this.lastTipUpdate = currentTime;
+        }
+    }
+    
+    rotateBitcoinTip() {
+        // Get next tip with smooth transition
+        const nextTip = this.tips[this.currentTipIndex];
+        
+        // Update desktop tip
+        const tipContent = document.getElementById('tipContent');
+        if (tipContent) {
+            this.fadeTipTransition(tipContent, nextTip);
+        }
+        
+        // Update mobile tip
+        const mobileTipContent = document.getElementById('mobileTipContent');
+        if (mobileTipContent) {
+            this.fadeTipTransition(mobileTipContent, nextTip);
+        }
+        
+        // Move to next tip
+        this.currentTipIndex = (this.currentTipIndex + 1) % this.tips.length;
+        
+        console.log(`Bitcoin tip rotated: ${nextTip}`);
+    }
+    
+    fadeTipTransition(element, newTip) {
+        // Add fade out effect
+        element.style.opacity = '0.3';
+        element.style.transition = 'opacity 0.5s ease';
+        
+        setTimeout(() => {
+            element.innerHTML = `<p>${newTip}</p>`;
+            element.style.opacity = '1';
+        }, 250);
+    }
+    
     startGame() {
         if (this.gameRunning) return;
         
@@ -433,6 +523,11 @@ class SnakeSats {
         
         // Initialize speed progression
         this.resetSpeedProgression();
+        
+        // Initialize Bitcoin tips system
+        this.gameStartTime = Date.now();
+        this.lastTipUpdate = 0;
+        this.currentTipIndex = 0;
         
         // Reset object generation timers
         this.lastSatSpawn = 0;
@@ -486,6 +581,7 @@ class SnakeSats {
         this.update();
         this.draw();
         this.updateSpeedProgression();
+        this.updateBitcoinTips(); // Add Bitcoin tips update
         
         setTimeout(() => this.gameLoop(), this.currentSpeed);
     }
@@ -920,11 +1016,8 @@ class SnakeSats {
         
         this.updateScore();
         
-        // Update tip content
-        const tipContent = document.getElementById('tipContent');
-        if (tipContent) {
-            tipContent.innerHTML = `<p>${this.getRandomMessage()}</p>`;
-        }
+        // Bitcoin tips are now handled by the timing system
+        // No need to update here anymore
     }
     
     updateMobileStats() {
@@ -943,25 +1036,8 @@ class SnakeSats {
             if (el) el.textContent = value;
         });
         
-        // Update mobile Bitcoin tips
-        const mobileTipContent = document.getElementById('mobileTipContent');
-        if (mobileTipContent) {
-            mobileTipContent.innerHTML = `<p>${this.getRandomMessage()}</p>`;
-        }
-    }
-    
-    getRandomMessage() {
-        const messages = [
-            "💡 Stack sats regularly - consistency beats timing!",
-            "🔒 Self-custody is key - not your keys, not your coins!",
-            "📈 DCA (Dollar Cost Average) reduces emotional trading",
-            "❄️ Cold storage keeps your Bitcoin safe from hackers",
-            "🚫 Avoid FOMO - stick to your investment plan",
-            "💰 Bitcoin is scarce - only 21 million will ever exist",
-            "⚡ Lightning Network enables fast, cheap transactions",
-            "🌍 Bitcoin is global money for the internet age"
-        ];
-        return messages[Math.floor(Math.random() * messages.length)];
+        // Bitcoin tips are now handled by the timing system
+        // No need to update here anymore
     }
     
     showMessage(text) {
@@ -984,8 +1060,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Expose game instance globally for testing
     window.gameInstance = game;
     
-    // Load test script for canvas size validation
+    // Load test scripts for validation
     const testScript = document.createElement('script');
     testScript.src = 'test_canvas_size.js';
     document.head.appendChild(testScript);
+    
+    const tipsTestScript = document.createElement('script');
+    tipsTestScript.src = 'test_bitcoin_tips.js';
+    document.head.appendChild(tipsTestScript);
 }); 

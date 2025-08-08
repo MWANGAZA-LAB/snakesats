@@ -460,6 +460,7 @@ body {
     font-size: 0.85rem;
     line-height: 1.4;
     text-align: center;
+    transition: opacity 0.5s ease;
 }
 
 /* Mobile Info Section */
@@ -580,6 +581,7 @@ body {
     font-size: 0.85rem;
     line-height: 1.4;
     text-align: center;
+    transition: opacity 0.5s ease;
 }
 
 /* Mobile Drawer */
