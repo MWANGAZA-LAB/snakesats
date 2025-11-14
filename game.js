@@ -21,6 +21,10 @@ class SnakeSats {
         this.fiatHit = 0;
         this.bestScore = localStorage.getItem('snakeSatsBestScore') || 0;
         
+        // Performance optimization
+        this.lastFrameTime = 0;
+        this.animationFrame = null;
+        
         // Speed progression system
         this.currentSpeed = 300; // Initial speed (good for beginners)
         this.speedLevel = 1;
@@ -206,6 +210,17 @@ class SnakeSats {
     playSound(soundName) {
         if (this.sounds[soundName]) {
             this.sounds[soundName]();
+        }
+    }
+    
+    triggerHapticFeedback(pattern) {
+        // Haptic feedback for mobile devices
+        if ('vibrate' in navigator && this.isMobile) {
+            if (typeof pattern === 'number') {
+                navigator.vibrate(pattern);
+            } else if (Array.isArray(pattern)) {
+                navigator.vibrate(pattern);
+            }
         }
     }
     
@@ -508,6 +523,11 @@ class SnakeSats {
         
         console.log('🎮 Starting SnakeSats game...');
         
+        // Cancel any existing animation frame
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        
         this.gameRunning = true;
         this.gamePaused = false;
         this.direction = {x: 0, y: 0}; // Start with no movement until user input
@@ -524,6 +544,9 @@ class SnakeSats {
         this.satsCollected = 0;
         this.goodPractices = 0;
         this.fiatHit = 0;
+        
+        // Initialize performance tracking
+        this.lastFrameTime = performance.now();
         
         // Initialize speed progression
         this.resetSpeedProgression();
@@ -567,8 +590,15 @@ class SnakeSats {
         this.updateButtonStates();
         
         if (this.gamePaused) {
+            // Stop animation frame when paused
+            if (this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+                this.animationFrame = null;
+            }
             this.showMessage('Game Paused - Press P or tap to resume');
         } else {
+            // Resume animation frame and reset timing
+            this.lastFrameTime = performance.now();
             this.hideMessage();
             this.gameLoop();
         }
@@ -588,14 +618,27 @@ class SnakeSats {
     }
     
     gameLoop() {
-        if (!this.gameRunning || this.gamePaused) return;
+        if (!this.gameRunning || this.gamePaused) {
+            this.animationFrame = null;
+            return;
+        }
         
-        this.update();
-        this.draw();
-        this.updateSpeedProgression();
-        this.updateBitcoinTips(); // Add Bitcoin tips update
+        const now = performance.now();
+        const elapsed = now - this.lastFrameTime;
         
-        setTimeout(() => this.gameLoop(), this.currentSpeed);
+        // Update game state at the current speed interval
+        if (elapsed >= this.currentSpeed) {
+            this.update();
+            this.draw();
+            this.updateSpeedProgression();
+            this.updateBitcoinTips();
+            
+            // Adjust for any extra time elapsed
+            this.lastFrameTime = now - (elapsed % this.currentSpeed);
+        }
+        
+        // Request next frame for smooth 60fps rendering
+        this.animationFrame = requestAnimationFrame(() => this.gameLoop());
     }
     
     updateSpeedProgression() {
@@ -753,6 +796,7 @@ class SnakeSats {
             this.satsCollected++;
             this.health = Math.min(this.maxHealth, this.health + this.difficultySettings[this.difficulty].healthGain);
             this.playSound('collect');
+            this.triggerHapticFeedback(50); // Light vibration for sat collection
             this.generateSat();
             
             // Debug: Log sat collection for speed progression
@@ -766,6 +810,7 @@ class SnakeSats {
             this.health -= this.difficultySettings[this.difficulty].fiatDamage;
             this.fiatHit++;
             this.playSound('damage');
+            this.triggerHapticFeedback([100, 50, 100]); // Pattern vibration for damage
             this.generateFiat();
         }
         
@@ -776,6 +821,7 @@ class SnakeSats {
             this.score += 20;
             this.goodPractices++;
             this.playSound('collect');
+            this.triggerHapticFeedback(75); // Medium vibration for bonus collection
             this.generateDo();
         }
         

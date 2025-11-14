@@ -18,6 +18,11 @@ body {
     max-width: 1800px;
     margin: 0 auto;
     padding: 8px;
+    /* Support for safe area insets (notched devices) */
+    padding: max(8px, env(safe-area-inset-top)) 
+             max(8px, env(safe-area-inset-right)) 
+             max(8px, env(safe-area-inset-bottom)) 
+             max(8px, env(safe-area-inset-left));
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -202,6 +207,11 @@ body {
     box-shadow: 0 4px 12px rgba(247, 147, 26, 0.4);
 }
 
+.game-btn:focus-visible {
+    outline: 3px solid #f7931a;
+    outline-offset: 2px;
+}
+
 .game-btn.secondary {
     background: rgba(26, 35, 50, 0.9);
     color: #f7931a;
@@ -354,6 +364,11 @@ body {
     max-width: 100%;
     height: auto;
     aspect-ratio: 1;
+    /* Prevent browser touch gestures */
+    touch-action: none;
+    /* Optimize for high DPI displays */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .game-message {

@@ -1,0 +1,84 @@
+{
+  "name": "SnakeSats - Bitcoin Education Game",
+  "short_name": "SnakeSats",
+  "description": "Learn Bitcoin investment best practices through engaging Snake gameplay. Collect sats, avoid fiat, and master crypto fundamentals!",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#f7931a",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["education", "games"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230f1419' width='100' height='100'/><text y='75' x='50' text-anchor='middle' font-size='70'>🐍</text></svg>",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230f1419' width='100' height='100'/><text y='75' x='50' text-anchor='middle' font-size='70'>🐍</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230f1419' width='100' height='100'/><text y='75' x='50' text-anchor='middle' font-size='70'>🐍</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f7931a' width='100' height='100'/><text y='75' x='50' text-anchor='middle' font-size='70'>🐍</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%230f1419' width='1280' height='720'/><text y='360' x='640' text-anchor='middle' font-size='100' fill='%23f7931a'>SnakeSats</text></svg>",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "label": "Desktop view of SnakeSats game"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 750 1334'><rect fill='%230f1419' width='750' height='1334'/><text y='667' x='375' text-anchor='middle' font-size='80' fill='%23f7931a'>SnakeSats</text></svg>",
+      "sizes": "750x1334",
+      "type": "image/svg+xml",
+      "label": "Mobile view of SnakeSats game"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Game",
+      "short_name": "New Game",
+      "description": "Start a new SnakeSats game",
+      "url": "/?action=newgame",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' x='50' text-anchor='middle' font-size='70'>🎮</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Best Score",
+      "short_name": "Score",
+      "description": "View your best score",
+      "url": "/?action=bestscore",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' x='50' text-anchor='middle' font-size='70'>🏆</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

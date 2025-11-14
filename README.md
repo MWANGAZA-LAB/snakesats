@@ -4,17 +4,17 @@
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/MWANGAZA-LAB/snakesats)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-> **Learn Bitcoin investment best practices through engaging gameplay!** 🚀
+> **Learn Bitcoin investment best practices through engaging gameplay!** 
 
 **🎮 [Play SnakeSats Now](https://mwangaza-lab.github.io/snakesats/)**
 <img width="1916" height="974" alt="image" src="https://github.com/user-attachments/assets/6a965497-65e8-4589-b0bb-c477cab13177" />
 
 
-## 📖 About
+## About
 
 SnakeSats is an educational game that teaches Bitcoin investment best practices through classic Snake gameplay mechanics. Players control a snake to collect "sats" (Bitcoin's smallest unit), avoid "fiat currency" obstacles, and learn valuable crypto investment lessons along the way.
 
-### 🎯 Educational Goals
+### Educational Goals
 
 - **Self-Custody**: Learn the importance of controlling your own keys
 - **DCA Strategy**: Understand Dollar Cost Averaging principles
@@ -22,7 +22,7 @@ SnakeSats is an educational game that teaches Bitcoin investment best practices 
 - **Bitcoin Fundamentals**: Master core Bitcoin concepts
 - **Avoid Bad Practices**: Recognize common crypto pitfalls
 
-## ✨ Features
+## Features
 
 ### 🎮 Gameplay
 - **Classic Snake Mechanics**: Intuitive controls and familiar gameplay
@@ -31,29 +31,29 @@ SnakeSats is an educational game that teaches Bitcoin investment best practices 
 - **Level Progression**: Advance through increasingly challenging levels
 - **Score Tracking**: Compete for high scores and track your progress
 
-### 📱 Responsive Design
+### Responsive Design
 - **Mobile-First**: Optimized for touch devices with swipe controls
 - **Desktop Experience**: Full keyboard support and detailed interface
 - **Adaptive Layout**: Automatically adjusts to screen size
 - **Touch Controls**: Intuitive swipe gestures and tap interactions
 
-### 🎨 Visual Design
+### Visual Design
 - **Bitcoin Theme**: Authentic orange color scheme (#f7931a)
 - **Modern UI**: Clean, professional interface with smooth animations
 - **Dark Mode**: Easy on the eyes with dark backgrounds
 - **Visual Feedback**: Clear indicators for game state and progress
 
-### 🔊 Audio Experience
+### Audio Experience
 - **Sound Effects**: Web Audio API-generated game sounds
 - **Toggle Controls**: Enable/disable sound and music independently
 - **Haptic Feedback**: Touch feedback for mobile devices
 
-### 🎯 Difficulty Levels
+### Difficulty Levels
 - **Beginner**: Slower speed, more health gain, fewer obstacles
 - **Normal**: Balanced gameplay for experienced players
 - **Legendary**: High-speed challenge for expert players
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Play Online
 Visit the live game at: **[https://mwangaza-lab.github.io/snakesats/](https://mwangaza-lab.github.io/snakesats/)**
@@ -102,7 +102,7 @@ Visit the live game at: **[https://mwangaza-lab.github.io/snakesats/](https://mw
 - **Progress**: Reach higher levels with good health
 - **Compete**: Beat your best score!
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Graphics**: HTML5 Canvas for game rendering
@@ -111,7 +111,7 @@ Visit the live game at: **[https://mwangaza-lab.github.io/snakesats/](https://mw
 - **Deployment**: GitHub Pages for hosting
 - **Responsive**: CSS Grid and Flexbox for layout
 
-## 📱 Mobile Features
+## Mobile Features
 
 ### Touch Controls
 - **Swipe Gestures**: Intuitive directional control
@@ -125,7 +125,7 @@ Visit the live game at: **[https://mwangaza-lab.github.io/snakesats/](https://mw
 - **Health Bar**: Visual health indicator
 - **Compact Stats**: Essential information at a glance
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
 ### Bitcoin Authenticity
 - **Color Scheme**: Authentic Bitcoin orange (#f7931a)
@@ -139,7 +139,7 @@ Visit the live game at: **[https://mwangaza-lab.github.io/snakesats/](https://mw
 - **Accessibility**: Keyboard navigation and screen reader support
 - **Performance**: Smooth 60fps gameplay
 
-## 🔧 Development
+## Development
 
 ### Project Structure
 ```
@@ -161,7 +161,7 @@ snakesats/
 - **State Management**: Game state and progression
 - **Audio System**: Sound effects and feedback
 
-## 🌟 Contributing
+## Contributing
 
 We welcome contributions! Here's how you can help:
 
@@ -178,18 +178,18 @@ We welcome contributions! Here's how you can help:
 - Maintain Bitcoin educational accuracy
 - Add appropriate comments and documentation
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Bitcoin Community**: For educational content and inspiration
 - **Open Source**: Built with open web technologies
 - **GitHub Pages**: For free hosting and deployment
 - **Contributors**: Everyone who helps improve the game
 
-## 📞 Contact
+## Contact
 
 - **Website**: [https://mwangaza-lab.github.io/snakesats/](https://mwangaza-lab.github.io/snakesats/)
 - **Repository**: [https://github.com/MWANGAZA-LAB/snakesats](https://github.com/MWANGAZA-LAB/snakesats)
@@ -199,4 +199,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **🎮 Ready to learn Bitcoin while having fun? [Play SnakeSats Now!](https://mwangaza-lab.github.io/snakesats/)**
 
-*Stack sats, avoid fiat, and become a better Bitcoin investor! 🚀* 
+*Stack sats, avoid fiat, and become a better Bitcoin investor!* 
